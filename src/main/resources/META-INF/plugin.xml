@@ -1,0 +1,42 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.lipiridi.spotless-applier</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>Spotless Applier</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="lipiridi@gmail.com">lipiridi</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description>A plugin that adds the ability to apply Spotless formatting to code with the keyboard shortcut
+        Ctrl+Alt+;.
+        Spotless is a code formatting tool that helps maintain consistent code style and formatting across a project.
+    </description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.idea.maven</depends>
+    <depends>com.intellij.gradle</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup displayType="BALLOON" id="Spotless Applier"/>
+    </extensions>
+
+    <actions>
+        <action id="com.lipiridi.spotless.applier.ReformatFilesAction"
+                class="com.lipiridi.spotless.applier.ReformatFilesAction"
+                text="Reformat Code With Spotless"
+                description="Reformat code with Spotless">
+            <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>
+            <keyboard-shortcut first-keystroke="control alt SEMICOLON" keymap="$default"/>
+        </action>
+    </actions>
+</idea-plugin>

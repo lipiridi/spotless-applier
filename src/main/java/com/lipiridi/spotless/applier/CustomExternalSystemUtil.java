@@ -1,0 +1,55 @@
+package com.lipiridi.spotless.applier;
+
+import com.intellij.execution.RunnerAndConfigurationSettings;
+import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.externalSystem.model.ProjectSystemId;
+import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
+import com.intellij.openapi.externalSystem.task.TaskCallback;
+import com.intellij.openapi.externalSystem.util.ExternalSystemUtil;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.project.Project;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public final class CustomExternalSystemUtil {
+    private static final Logger LOG = Logger.getInstance(CustomExternalSystemUtil.class);
+
+    public static void runTask(final @NotNull ExternalSystemTaskExecutionSettings taskSettings,
+                               final @NotNull String executorId,
+                               final @NotNull Project project,
+                               final @NotNull ProjectSystemId externalSystemId,
+                               final @Nullable TaskCallback callback) {
+        ExecutionEnvironment environment = ExternalSystemUtil.createExecutionEnvironment(project, externalSystemId, taskSettings, executorId);
+        runTask(taskSettings, executorId, project, externalSystemId, callback, environment);
+    }
+
+    public static void runTask(final @NotNull ExternalSystemTaskExecutionSettings taskSettings,
+                               final @NotNull String executorId,
+                               final @NotNull Project project,
+                               final @NotNull ProjectSystemId externalSystemId,
+                               final @Nullable TaskCallback callback,
+                               final ExecutionEnvironment environment) {
+        if (environment == null) {
+            LOG.warn("Execution environment for " + externalSystemId + " is null");
+            return;
+        }
+
+        RunnerAndConfigurationSettings runnerAndConfigurationSettings = environment.getRunnerAndConfigurationSettings();
+        assert runnerAndConfigurationSettings != null;
+        runnerAndConfigurationSettings.setActivateToolWindowBeforeRun(false);
+
+        final TaskUnderProgress task = new TaskUnderProgress(executorId, project, callback, environment);
+
+        final String title = project.getName() + " " + taskSettings.getTaskNames();
+        Task.Backgroundable backgroundable = new Task.Backgroundable(project, title) {
+            @Override
+            public void run(@NotNull ProgressIndicator indicator) {
+                task.execute(indicator);
+            }
+        };
+
+        backgroundable.queue();
+    }
+}
