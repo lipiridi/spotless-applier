@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.Objects;
 
-public class ReformatFilesProcessor {
+public class ReformatProcessor {
 
     private final static NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance()
             .getNotificationGroup("Spotless Applier");
@@ -33,13 +33,13 @@ public class ReformatFilesProcessor {
     private final String projectBasePath;
     private final ReformatTaskCallback reformatTaskCallback;
 
-    public ReformatFilesProcessor(@NotNull Project project) {
+    public ReformatProcessor(@NotNull Project project) {
         this.project = project;
         this.projectBasePath = project.getBasePath();
         this.reformatTaskCallback = new ReformatTaskCallback(project, NOTIFICATION_GROUP);
     }
 
-    public void process() {
+    public void run() {
         if (projectBasePath == null) {
             return;
         }
@@ -86,7 +86,7 @@ public class ReformatFilesProcessor {
         externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
 
-        CustomExternalSystemUtil.runTask(
+        ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
                 DefaultRunExecutor.EXECUTOR_ID,
                 project,
@@ -103,7 +103,7 @@ public class ReformatFilesProcessor {
 
         ExecutionEnvironment environment = getMavenExecutionEnvironment(command);
 
-        CustomExternalSystemUtil.runTask(
+        ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
                 DefaultRunExecutor.EXECUTOR_ID,
                 project,

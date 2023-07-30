@@ -13,8 +13,8 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class CustomExternalSystemUtil {
-    private static final Logger LOG = Logger.getInstance(CustomExternalSystemUtil.class);
+public final class ToolEnvExternalSystemUtil {
+    private static final Logger LOG = Logger.getInstance(ToolEnvExternalSystemUtil.class);
 
     public static void runTask(final @NotNull ExternalSystemTaskExecutionSettings taskSettings,
                                final @NotNull String executorId,
