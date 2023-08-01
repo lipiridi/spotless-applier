@@ -9,6 +9,7 @@ import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -21,7 +22,7 @@ import org.jetbrains.idea.maven.execution.MavenRunnerSettings;
 import org.jetbrains.idea.maven.utils.MavenUtil;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -32,11 +33,13 @@ public class ReformatProcessor {
     private final Project project;
     private final String projectBasePath;
     private final ReformatTaskCallback reformatTaskCallback;
+    private final Document document;
 
-    public ReformatProcessor(@NotNull Project project) {
+    public ReformatProcessor(@NotNull Project project, Document document) {
         this.project = project;
         this.projectBasePath = project.getBasePath();
-        this.reformatTaskCallback = new ReformatTaskCallback(project, NOTIFICATION_GROUP);
+        this.document = document;
+        this.reformatTaskCallback = new ReformatTaskCallback(project, NOTIFICATION_GROUP, document);
     }
 
     public void run() {
@@ -44,7 +47,7 @@ public class ReformatProcessor {
             return;
         }
 
-        VirtualFile baseVirtualFile = VfsUtil.findFileByIoFile(new File(projectBasePath), true);
+        VirtualFile baseVirtualFile = VfsUtil.findFile(Path.of(projectBasePath), true);
 
         if (baseVirtualFile == null) {
             return;
@@ -91,7 +94,8 @@ public class ReformatProcessor {
                 DefaultRunExecutor.EXECUTOR_ID,
                 project,
                 GradleConstants.SYSTEM_ID,
-                reformatTaskCallback
+                reformatTaskCallback,
+                document
         );
     }
 
@@ -109,6 +113,7 @@ public class ReformatProcessor {
                 project,
                 MavenUtil.SYSTEM_ID,
                 reformatTaskCallback,
+                document,
                 environment
         );
     }
