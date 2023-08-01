@@ -31,13 +31,20 @@
     </extensions>
 
     <actions>
-        <action id="com.lipiridi.spotless.applier.ReformatCodeAction"
-                class="com.lipiridi.spotless.applier.ReformatCodeAction"
-                text="Reformat Code With Spotless"
-                description="Reformat code with Spotless">
-            <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="after"/>
-            <add-to-group group-id="ProjectViewPopupMenu" relative-to-action="ReformatCode" anchor="after"/>
+        <action id="com.lipiridi.spotless.applier.ReformatFileAction"
+                class="com.lipiridi.spotless.applier.ReformatFileAction"
+                text="Reformat File With Spotless"
+                description="Reformat file with Spotless">
+            <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>
             <keyboard-shortcut first-keystroke="control alt SEMICOLON" keymap="$default"/>
+        </action>
+        <action id="com.lipiridi.spotless.applier.ReformatAllFilesAction"
+                class="com.lipiridi.spotless.applier.ReformatAllFilesAction"
+                text="Reformat All Files With Spotless"
+                description="Reformat all files with Spotless">
+            <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>
+            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" relative-to-action="ReformatCode" anchor="before"/>
+            <keyboard-shortcut first-keystroke="control alt shift SEMICOLON" keymap="$default"/>
         </action>
     </actions>
 </idea-plugin>
