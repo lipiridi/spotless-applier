@@ -13,7 +13,7 @@ public class ReformatAllFilesAction extends AnAction {
             return;
         }
 
-        new ReformatProcessor(project, null).run();
+        new ReformatProcessor(project).run();
     }
 }
 

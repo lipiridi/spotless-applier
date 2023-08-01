@@ -14,6 +14,7 @@ import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExe
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
 import org.jetbrains.idea.maven.execution.MavenRunner;
@@ -34,11 +35,19 @@ public class ReformatProcessor {
     private final String projectBasePath;
     private final ReformatTaskCallback reformatTaskCallback;
     private final Document document;
+    private final PsiFile psiFile;
+    private final boolean reformatAllFiles;
 
-    public ReformatProcessor(@NotNull Project project, Document document) {
+    public ReformatProcessor(@NotNull Project project) {
+        this(project, null, null);
+    }
+
+    public ReformatProcessor(@NotNull Project project, Document document, PsiFile psiFile) {
         this.project = project;
         this.projectBasePath = project.getBasePath();
         this.document = document;
+        this.psiFile = psiFile;
+        this.reformatAllFiles = document == null;
         this.reformatTaskCallback = new ReformatTaskCallback(project, NOTIFICATION_GROUP, document);
     }
 
@@ -88,6 +97,12 @@ public class ReformatProcessor {
         externalSettings.setExternalProjectPath(projectBasePath);
         externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
+        if (!reformatAllFiles) {
+            externalSettings.setScriptParameters(
+                    String.format(
+                            "-PspotlessIdeHook=\"%s\"",
+                            psiFile.getVirtualFile().getPath()));
+        }
 
         ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
@@ -127,6 +142,16 @@ public class ReformatProcessor {
         MavenRunnerParameters params = new MavenRunnerParameters();
         params.setWorkingDirPath(projectBasePath);
         params.setGoals(Collections.singletonList(command));
+
+        if (!reformatAllFiles) {
+            settings.setVmOptions(
+                    String.format(
+                            "-DspotlessFiles=\"%s\"",
+                            psiFile.getVirtualFile().getPath()
+                                    .replaceAll("\\.", "\\\\.")
+                                    .replaceAll("/", ".")
+                    ));
+        }
 
         RunnerAndConfigurationSettings configSettings = MavenRunConfigurationType.createRunnerAndConfigurationSettings(null,
                 settings,

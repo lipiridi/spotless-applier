@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -22,7 +23,10 @@ public class ReformatFileAction extends AnAction {
         Optional
                 .ofNullable(event.getDataContext().getData(CommonDataKeys.EDITOR))
                 .map(Editor::getDocument)
-                .ifPresent(document -> new ReformatProcessor(project, document).run());
+                .ifPresent(document -> {
+                    PsiFile psiFile = event.getDataContext().getData(CommonDataKeys.PSI_FILE);
+                    new ReformatProcessor(project, document, psiFile).run();
+                });
     }
 
     @Override

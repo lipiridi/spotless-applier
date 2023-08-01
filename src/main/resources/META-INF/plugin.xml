@@ -43,7 +43,7 @@
                 text="Reformat All Files With Spotless"
                 description="Reformat all files with Spotless">
             <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>
-            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" relative-to-action="ReformatCode" anchor="before"/>
+            <!--<add-to-group group-id="ProjectViewPopupMenuModifyGroup" relative-to-action="ReformatCode" anchor="before"/>-->
             <keyboard-shortcut first-keystroke="control alt shift SEMICOLON" keymap="$default"/>
         </action>
     </actions>
