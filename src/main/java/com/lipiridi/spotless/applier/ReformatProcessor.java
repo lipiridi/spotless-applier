@@ -1,5 +1,6 @@
 package com.lipiridi.spotless.applier;
 
+import com.intellij.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.execution.Executor;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.executors.DefaultRunExecutor;
@@ -9,27 +10,35 @@ import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import org.gradle.util.GradleVersion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
 import org.jetbrains.idea.maven.execution.MavenRunner;
 import org.jetbrains.idea.maven.execution.MavenRunnerParameters;
 import org.jetbrains.idea.maven.execution.MavenRunnerSettings;
 import org.jetbrains.idea.maven.utils.MavenUtil;
+import org.jetbrains.plugins.gradle.settings.GradleProjectSettings;
+import org.jetbrains.plugins.gradle.settings.GradleSettings;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
 
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ReformatProcessor {
 
-    private final static NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance()
+    private static final Logger LOG = Logger.getInstance(ReformatCodeProcessor.class);
+    private static final Version NO_CONFIG_CACHE_MIN_GRADLE_VERSION = new Version(6, 6, 0);
+    private static final NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance()
             .getNotificationGroup("Spotless Applier");
     private final Project project;
     private final String projectBasePath;
@@ -93,6 +102,8 @@ public class ReformatProcessor {
     }
 
     private void executeGradleTask() {
+        String noConfigCacheOption = shouldAddNoConfigCacheOption() ? " --no-configuration-cache" : "";
+
         ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
         externalSettings.setExternalProjectPath(projectBasePath);
         externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
@@ -100,8 +111,8 @@ public class ReformatProcessor {
         if (!reformatAllFiles) {
             externalSettings.setScriptParameters(
                     String.format(
-                            "-PspotlessIdeHook=\"%s\"",
-                            psiFile.getVirtualFile().getPath()));
+                            "-PspotlessIdeHook=\"%s\"%s",
+                            psiFile.getVirtualFile().getPath(), noConfigCacheOption));
         }
 
         ToolEnvExternalSystemUtil.runTask(
@@ -112,6 +123,25 @@ public class ReformatProcessor {
                 reformatTaskCallback,
                 document
         );
+    }
+
+    private boolean shouldAddNoConfigCacheOption() {
+        Optional<GradleProjectSettings> maybeProjectSettings =
+                Optional.ofNullable(
+                        GradleSettings.getInstance(project)
+                                .getLinkedProjectSettings(Objects.requireNonNull(project.getBasePath())));
+
+        if (maybeProjectSettings.isEmpty()) {
+            LOG.warn(
+                    "Unable to parse linked project settings, leaving off `--no-configuration-cache` argument");
+            return false;
+        }
+
+        GradleVersion gradleVersion = maybeProjectSettings.get().resolveGradleVersion();
+
+        return Objects.requireNonNull(Version.parseVersion(gradleVersion.getVersion()))
+                .isOrGreaterThan(
+                        NO_CONFIG_CACHE_MIN_GRADLE_VERSION.major, NO_CONFIG_CACHE_MIN_GRADLE_VERSION.minor);
     }
 
     private void executeMavenTask() {
