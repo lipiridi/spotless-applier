@@ -10,14 +10,6 @@
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor email="lipiridi@gmail.com">lipiridi</vendor>
 
-    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
-         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
-         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
-    <description>A plugin that adds the ability to apply Spotless formatting to code with the keyboard shortcut
-        Ctrl+Alt+;.
-        Spotless is a code formatting tool that helps maintain consistent code style and formatting across a project.
-    </description>
-
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
