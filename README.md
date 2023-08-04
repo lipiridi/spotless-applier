@@ -1,6 +1,6 @@
 # Spotless Applier
 
-[![Build](https://github.com/lipiridi/spotless-applier/workflows/Build/badge.svg)][gh:build]
+[![Build](https://github.com/lipiridi/spotless-applier/workflows/Build/badge.svg)](https://github.com/lipiridi/spotless-applier/actions)
 
 <!-- Plugin description -->
 An IntelliJ plugin to allow running the [spotless](https://github.com/diffplug/spotless) gradle and maven tasks
