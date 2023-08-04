@@ -129,7 +129,7 @@ public class ReformatProcessor {
         Optional<GradleProjectSettings> maybeProjectSettings =
                 Optional.ofNullable(
                         GradleSettings.getInstance(project)
-                                .getLinkedProjectSettings(Objects.requireNonNull(project.getBasePath())));
+                                .getLinkedProjectSettings(projectBasePath));
 
         if (maybeProjectSettings.isEmpty()) {
             LOG.warn(

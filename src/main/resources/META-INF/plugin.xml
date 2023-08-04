@@ -28,6 +28,10 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="Spotless Applier"/>
+        <applicationConfigurable id="SpotlessConfigurable"
+                                 instance="com.lipiridi.spotless.applier.ui.SpotlessConfigurable"
+                                 displayName="Spotless Applier"
+        parentId="tools"/>
     </extensions>
 
     <actions>
