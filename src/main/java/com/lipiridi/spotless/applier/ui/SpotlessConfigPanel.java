@@ -1,5 +1,7 @@
 package com.lipiridi.spotless.applier.ui;
 
+import com.intellij.openapi.components.ServiceManager;
+
 import javax.swing.*;
 
 public class SpotlessConfigPanel extends JPanel {
@@ -12,6 +14,15 @@ public class SpotlessConfigPanel extends JPanel {
         // Add any additional components or layout as needed
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(isOptimizeImportsBeforeApplyingCheckBox);
+
+        // Load the checkbox state from the settings
+        loadSettings();
+    }
+
+    private void loadSettings() {
+        SpotlessConfig spotlessConfig = ServiceManager.getService(SpotlessConfig.class);
+        boolean optimizeImports = spotlessConfig.isOptimizeImportsBeforeApplying();
+        isOptimizeImportsBeforeApplyingCheckBox.setSelected(optimizeImports);
     }
 
     public boolean isOptimizeImportsBeforeApplying() {

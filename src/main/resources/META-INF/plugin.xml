@@ -23,8 +23,14 @@
         <applicationConfigurable id="SpotlessConfigurable"
                                  instance="com.lipiridi.spotless.applier.ui.SpotlessConfigurable"
                                  displayName="Spotless Applier"
-        parentId="tools"/>
+                                 parentId="tools"/>
     </extensions>
+
+    <application-components>
+        <component>
+            <implementation-class>com.lipiridi.spotless.applier.ui.SpotlessConfig</implementation-class>
+        </component>
+    </application-components>
 
     <actions>
         <action id="com.lipiridi.spotless.applier.ReformatFileAction"
