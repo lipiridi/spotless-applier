@@ -29,10 +29,11 @@ public class TaskUnderProgress {
     private final TaskCallback callback;
     private final ExecutionEnvironment environment;
 
-    public TaskUnderProgress(String executorId,
-                             @NotNull Project project,
-                             @Nullable TaskCallback callback,
-                             ExecutionEnvironment environment) {
+    public TaskUnderProgress(
+            String executorId,
+            @NotNull Project project,
+            @Nullable TaskCallback callback,
+            ExecutionEnvironment environment) {
         this.executorId = executorId;
         this.project = project;
         this.callback = callback;
@@ -45,17 +46,22 @@ public class TaskUnderProgress {
         final Ref<Boolean> result = new Ref<>(false);
         final Disposable disposable = Disposer.newDisposable();
 
-        project.getMessageBus().connect(disposable).subscribe(ExecutionManager.EXECUTION_TOPIC, getExecutionListener(targetDone, result));
+        project.getMessageBus()
+                .connect(disposable)
+                .subscribe(ExecutionManager.EXECUTION_TOPIC, getExecutionListener(targetDone, result));
 
         try {
-            ApplicationManager.getApplication().invokeAndWait(() -> {
-                try {
-                    environment.getRunner().execute(environment);
-                } catch (ExecutionException e) {
-                    targetDone.up();
-                    LOG.error(e);
-                }
-            }, ModalityState.defaultModalityState());
+            ApplicationManager.getApplication()
+                    .invokeAndWait(
+                            () -> {
+                                try {
+                                    environment.getRunner().execute(environment);
+                                } catch (ExecutionException e) {
+                                    targetDone.up();
+                                    LOG.error(e);
+                                }
+                            },
+                            ModalityState.defaultModalityState());
         } catch (Exception e) {
             LOG.error(e);
             Disposer.dispose(disposable);
@@ -73,37 +79,43 @@ public class TaskUnderProgress {
             }
         }
         if (!result.get()) {
-            ApplicationManager.getApplication().invokeLater(() -> {
-                ToolWindow window = ToolWindowManager.getInstance(project).getToolWindow(environment.getExecutor().getToolWindowId());
-                if (window != null) {
-                    window.activate(null, false, false);
-                }
-            }, project.getDisposed());
+            ApplicationManager.getApplication()
+                    .invokeLater(
+                            () -> {
+                                ToolWindow window = ToolWindowManager.getInstance(project)
+                                        .getToolWindow(environment.getExecutor().getToolWindowId());
+                                if (window != null) {
+                                    window.activate(null, false, false);
+                                }
+                            },
+                            project.getDisposed());
         }
     }
 
-    @NotNull
-    private ExecutionListener getExecutionListener(Semaphore targetDone, Ref<Boolean> result) {
+    @NotNull private ExecutionListener getExecutionListener(Semaphore targetDone, Ref<Boolean> result) {
         return new ExecutionListener() {
             @Override
-            public void processStartScheduled(final @NotNull String executorIdLocal, final @NotNull ExecutionEnvironment environmentLocal) {
+            public void processStartScheduled(
+                    final @NotNull String executorIdLocal, final @NotNull ExecutionEnvironment environmentLocal) {
                 if (executorId.equals(executorIdLocal) && environment.equals(environmentLocal)) {
                     targetDone.down();
                 }
             }
 
             @Override
-            public void processNotStarted(final @NotNull String executorIdLocal, final @NotNull ExecutionEnvironment environmentLocal) {
+            public void processNotStarted(
+                    final @NotNull String executorIdLocal, final @NotNull ExecutionEnvironment environmentLocal) {
                 if (executorId.equals(executorIdLocal) && environment.equals(environmentLocal)) {
                     targetDone.up();
                 }
             }
 
             @Override
-            public void processTerminated(@NotNull String executorIdLocal,
-                                          @NotNull ExecutionEnvironment environmentLocal,
-                                          @NotNull ProcessHandler handler,
-                                          int exitCode) {
+            public void processTerminated(
+                    @NotNull String executorIdLocal,
+                    @NotNull ExecutionEnvironment environmentLocal,
+                    @NotNull ProcessHandler handler,
+                    int exitCode) {
                 if (executorId.equals(executorIdLocal) && environment.equals(environmentLocal)) {
                     result.set(exitCode == 0);
                     targetDone.up();

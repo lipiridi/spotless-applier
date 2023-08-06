@@ -16,4 +16,3 @@ public class ReformatAllFilesAction extends AnAction {
         new ReformatProcessor(project).run();
     }
 }
-

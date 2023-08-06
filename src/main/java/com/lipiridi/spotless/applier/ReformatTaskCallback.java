@@ -21,13 +21,17 @@ public class ReformatTaskCallback implements TaskCallback {
     @Override
     public void onSuccess() {
         unlockDocument();
-        notificationGroup.createNotification("Spotless was applied", NotificationType.INFORMATION).notify(project);
+        notificationGroup
+                .createNotification("Spotless was applied", NotificationType.INFORMATION)
+                .notify(project);
     }
 
     @Override
     public void onFailure() {
         unlockDocument();
-        notificationGroup.createNotification("Spotless was not applied", NotificationType.ERROR).notify(project);
+        notificationGroup
+                .createNotification("Spotless was not applied", NotificationType.ERROR)
+                .notify(project);
     }
 
     private void unlockDocument() {

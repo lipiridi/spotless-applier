@@ -1,10 +1,9 @@
 package com.lipiridi.spotless.applier.ui;
 
 import com.intellij.openapi.options.Configurable;
+import javax.swing.*;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 public class SpotlessApplierSettingsConfigurable implements Configurable {
 
@@ -29,7 +28,8 @@ public class SpotlessApplierSettingsConfigurable implements Configurable {
     @Override
     public boolean isModified() {
         SpotlessApplierSettingsState settings = SpotlessApplierSettingsState.getInstance();
-        return spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying() != settings.optimizeImportsBeforeApplying;
+        return spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying()
+                != settings.optimizeImportsBeforeApplying;
     }
 
     @Override

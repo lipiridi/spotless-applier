@@ -10,7 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Service
-@State(name = "com.lipiridi.spotless.applier.ui.SpotlessSettingsState", storages = {@Storage("spotless-applier.xml")})
+@State(
+        name = "com.lipiridi.spotless.applier.ui.SpotlessSettingsState",
+        storages = {@Storage("spotless-applier.xml")})
 public final class SpotlessApplierSettingsState implements PersistentStateComponent<SpotlessApplierSettingsState> {
 
     public boolean optimizeImportsBeforeApplying;
@@ -19,8 +21,7 @@ public final class SpotlessApplierSettingsState implements PersistentStateCompon
         return ApplicationManager.getApplication().getService(SpotlessApplierSettingsState.class);
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public SpotlessApplierSettingsState getState() {
         return this;
     }

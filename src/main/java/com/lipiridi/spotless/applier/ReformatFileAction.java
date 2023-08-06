@@ -7,9 +7,8 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 public class ReformatFileAction extends AnAction {
 
@@ -20,8 +19,7 @@ public class ReformatFileAction extends AnAction {
             return;
         }
 
-        Optional
-                .ofNullable(event.getDataContext().getData(CommonDataKeys.EDITOR))
+        Optional.ofNullable(event.getDataContext().getData(CommonDataKeys.EDITOR))
                 .map(Editor::getDocument)
                 .ifPresent(document -> {
                     PsiFile psiFile = event.getDataContext().getData(CommonDataKeys.PSI_FILE);
@@ -37,12 +35,12 @@ public class ReformatFileAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent event) {
         // Check if there is an active editor.
-        boolean isActiveEditorAvailable = Optional
-                .ofNullable(event.getDataContext().getData(CommonDataKeys.EDITOR)).isPresent();
+        boolean isActiveEditorAvailable = Optional.ofNullable(
+                        event.getDataContext().getData(CommonDataKeys.EDITOR))
+                .isPresent();
 
         // Enable the action only when there is an active editor.
         event.getPresentation().setEnabled(isActiveEditorAvailable);
         event.getPresentation().setVisible(isActiveEditorAvailable);
     }
 }
-

@@ -1,5 +1,7 @@
 package com.lipiridi.spotless.applier;
 
+import com.intellij.codeInsight.actions.AbstractLayoutCodeProcessor;
+import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.execution.Executor;
 import com.intellij.execution.RunnerAndConfigurationSettings;
@@ -18,6 +20,11 @@ import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 import org.gradle.util.GradleVersion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
@@ -29,17 +36,12 @@ import org.jetbrains.plugins.gradle.settings.GradleProjectSettings;
 import org.jetbrains.plugins.gradle.settings.GradleSettings;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
 
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
-
 public class ReformatProcessor {
 
     private static final Logger LOG = Logger.getInstance(ReformatCodeProcessor.class);
     private static final Version NO_CONFIG_CACHE_MIN_GRADLE_VERSION = new Version(6, 6, 0);
-    private static final NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance()
-            .getNotificationGroup("Spotless Applier");
+    private static final NotificationGroup NOTIFICATION_GROUP =
+            NotificationGroupManager.getInstance().getNotificationGroup("Spotless Applier");
     private final Project project;
     private final String projectBasePath;
     private final ReformatTaskCallback reformatTaskCallback;
@@ -74,7 +76,9 @@ public class ReformatProcessor {
         BuildTool buildTool = resolveBuildTool(baseVirtualFile);
 
         if (buildTool == null) {
-            NOTIFICATION_GROUP.createNotification("Unable to resolve build tool", NotificationType.ERROR).notify(project);
+            NOTIFICATION_GROUP
+                    .createNotification("Unable to resolve build tool", NotificationType.ERROR)
+                    .notify(project);
             return;
         }
 
@@ -109,10 +113,8 @@ public class ReformatProcessor {
         externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
         if (!reformatAllFiles) {
-            externalSettings.setScriptParameters(
-                    String.format(
-                            "-PspotlessIdeHook=\"%s\"%s",
-                            psiFile.getVirtualFile().getPath(), noConfigCacheOption));
+            externalSettings.setScriptParameters(String.format(
+                    "-PspotlessIdeHook=\"%s\"%s", psiFile.getVirtualFile().getPath(), noConfigCacheOption));
         }
 
         ToolEnvExternalSystemUtil.runTask(
@@ -121,27 +123,23 @@ public class ReformatProcessor {
                 project,
                 GradleConstants.SYSTEM_ID,
                 reformatTaskCallback,
-                document
-        );
+                document,
+                getOptimizeImportProcessor());
     }
 
     private boolean shouldAddNoConfigCacheOption() {
         Optional<GradleProjectSettings> maybeProjectSettings =
-                Optional.ofNullable(
-                        GradleSettings.getInstance(project)
-                                .getLinkedProjectSettings(projectBasePath));
+                Optional.ofNullable(GradleSettings.getInstance(project).getLinkedProjectSettings(projectBasePath));
 
         if (maybeProjectSettings.isEmpty()) {
-            LOG.warn(
-                    "Unable to parse linked project settings, leaving off `--no-configuration-cache` argument");
+            LOG.warn("Unable to parse linked project settings, leaving off `--no-configuration-cache` argument");
             return false;
         }
 
         GradleVersion gradleVersion = maybeProjectSettings.get().resolveGradleVersion();
 
         return Objects.requireNonNull(Version.parseVersion(gradleVersion.getVersion()))
-                .isOrGreaterThan(
-                        NO_CONFIG_CACHE_MIN_GRADLE_VERSION.major, NO_CONFIG_CACHE_MIN_GRADLE_VERSION.minor);
+                .isOrGreaterThan(NO_CONFIG_CACHE_MIN_GRADLE_VERSION.major, NO_CONFIG_CACHE_MIN_GRADLE_VERSION.minor);
     }
 
     private void executeMavenTask() {
@@ -159,12 +157,11 @@ public class ReformatProcessor {
                 MavenUtil.SYSTEM_ID,
                 reformatTaskCallback,
                 document,
-                environment
-        );
+                getOptimizeImportProcessor(),
+                environment);
     }
 
-    @NotNull
-    private ExecutionEnvironment getMavenExecutionEnvironment(String command) {
+    @NotNull private ExecutionEnvironment getMavenExecutionEnvironment(String command) {
         MavenRunner mavenRunner = MavenRunner.getInstance(project);
 
         MavenRunnerSettings settings = mavenRunner.getState().clone();
@@ -174,21 +171,16 @@ public class ReformatProcessor {
         params.setGoals(Collections.singletonList(command));
 
         if (!reformatAllFiles) {
-            settings.setVmOptions(
-                    String.format(
-                            "-DspotlessFiles=\"%s\"",
-                            psiFile.getVirtualFile().getPath()
-                                    .replaceAll("\\.", "\\\\.")
-                                    .replaceAll("/", ".")
-                    ));
+            settings.setVmOptions(String.format(
+                    "-DspotlessFiles=\"%s\"",
+                    psiFile.getVirtualFile()
+                            .getPath()
+                            .replaceAll("\\.", "\\\\.")
+                            .replaceAll("/", ".")));
         }
 
-        RunnerAndConfigurationSettings configSettings = MavenRunConfigurationType.createRunnerAndConfigurationSettings(null,
-                settings,
-                params,
-                project,
-                MavenRunConfigurationType.generateName(project, params),
-                false);
+        RunnerAndConfigurationSettings configSettings = MavenRunConfigurationType.createRunnerAndConfigurationSettings(
+                null, settings, params, project, MavenRunConfigurationType.generateName(project, params), false);
 
         configSettings.setActivateToolWindowBeforeRun(false);
 
@@ -197,5 +189,12 @@ public class ReformatProcessor {
         return new ExecutionEnvironment(executor, runner, configSettings, project);
     }
 
-}
+    private AbstractLayoutCodeProcessor getOptimizeImportProcessor() {
+        SpotlessApplierSettingsState instance = SpotlessApplierSettingsState.getInstance();
+        if (!instance.optimizeImportsBeforeApplying) {
+            return null;
+        }
 
+        return psiFile == null ? new OptimizeImportsProcessor(project) : new OptimizeImportsProcessor(project, psiFile);
+    }
+}
