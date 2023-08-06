@@ -1,4 +1,4 @@
-package com.lipiridi.spotless.applier;
+package com.lipiridi.spotless.applier.action;
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -8,6 +8,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import java.util.Optional;
+
+import com.lipiridi.spotless.applier.ReformatProcessor;
 import org.jetbrains.annotations.NotNull;
 
 public class ReformatFileAction extends AnAction {

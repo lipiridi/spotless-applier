@@ -29,15 +29,15 @@
     </extensions>
 
     <actions>
-        <action id="com.lipiridi.spotless.applier.ReformatFileAction"
-                class="com.lipiridi.spotless.applier.ReformatFileAction"
+        <action id="com.lipiridi.spotless.applier.action.ReformatFileAction"
+                class="com.lipiridi.spotless.applier.action.ReformatFileAction"
                 text="Reformat File With Spotless"
                 description="Reformat file with Spotless">
             <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>
             <keyboard-shortcut first-keystroke="control alt SEMICOLON" keymap="$default"/>
         </action>
-        <action id="com.lipiridi.spotless.applier.ReformatAllFilesAction"
-                class="com.lipiridi.spotless.applier.ReformatAllFilesAction"
+        <action id="com.lipiridi.spotless.applier.action.ReformatAllFilesAction"
+                class="com.lipiridi.spotless.applier.action.ReformatAllFilesAction"
                 text="Reformat All Files With Spotless"
                 description="Reformat all files with Spotless">
             <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>

@@ -20,6 +20,8 @@ import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.lipiridi.spotless.applier.enums.BuildTool;
 import com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -194,7 +196,7 @@ public class ReformatProcessor {
         if (!instance.optimizeImportsBeforeApplying) {
             return null;
         }
-
+        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
         return psiFile == null ? new OptimizeImportsProcessor(project) : new OptimizeImportsProcessor(project, psiFile);
     }
 }
