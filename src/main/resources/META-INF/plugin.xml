@@ -20,17 +20,13 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="Spotless Applier"/>
-        <applicationConfigurable id="SpotlessConfigurable"
-                                 instance="com.lipiridi.spotless.applier.ui.SpotlessConfigurable"
-                                 displayName="Spotless Applier"
-                                 parentId="tools"/>
+        <applicationService
+                serviceImplementation="com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState"/>
+        <applicationConfigurable parentId="tools"
+                                 id="com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
+                                 instance="com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
+                                 displayName="Spotless Applier"/>
     </extensions>
-
-    <application-components>
-        <component>
-            <implementation-class>com.lipiridi.spotless.applier.ui.SpotlessConfig</implementation-class>
-        </component>
-    </application-components>
 
     <actions>
         <action id="com.lipiridi.spotless.applier.ReformatFileAction"
