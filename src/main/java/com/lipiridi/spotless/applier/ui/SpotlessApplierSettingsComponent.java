@@ -8,7 +8,7 @@ public class SpotlessApplierSettingsComponent {
 
     private final JPanel myMainPanel;
     private final JCheckBox isOptimizeImportsBeforeApplyingCheckBox =
-            new JBCheckBox("Optimize imports vefore appliying");
+            new JBCheckBox("Optimize imports before applying");
 
     public SpotlessApplierSettingsComponent() {
         myMainPanel = FormBuilder.createFormBuilder()
