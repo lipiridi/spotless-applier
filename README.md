@@ -3,8 +3,8 @@
 [![Build](https://github.com/lipiridi/spotless-applier/workflows/Build/badge.svg)](https://github.com/lipiridi/spotless-applier/actions)
 
 <!-- Plugin description -->
-An IntelliJ plugin to allow running the [spotless](https://github.com/diffplug/spotless) gradle and maven tasks
-from within the IDE on the current file selected in the editor or for the whole project.
+An IntelliJ plugin that allows running the [Spotless](https://github.com/diffplug/spotless) Gradle and Maven tasks 
+from within the IDE, either on the current file selected in the editor or for the whole project.
 
 Available actions:
 * <kbd>Code</kbd> > <kbd>Reformat File With Spotless</kbd> (shortcut <kbd>Ctrl+Alt+;</kbd>)
