@@ -5,4 +5,6 @@
 ## [Unreleased]
 
 ## [1.0.0]
-- Stable version
+- Ability to apply spotless both for gradle and maven based projects
+- Ability to apply for file opened in the editor or for the whole project
+- Ability to execute default "optimize import" before applying
