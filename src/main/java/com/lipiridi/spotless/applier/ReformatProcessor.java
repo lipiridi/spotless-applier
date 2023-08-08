@@ -196,7 +196,7 @@ public class ReformatProcessor {
         if (!instance.optimizeImportsBeforeApplying) {
             return null;
         }
-        CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+
         return psiFile == null ? new OptimizeImportsProcessor(project) : new OptimizeImportsProcessor(project, psiFile);
     }
 }
