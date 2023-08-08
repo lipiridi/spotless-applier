@@ -1,14 +1,14 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>com.lipiridi.spotless-applier</id>
+    <id>com.github.lipiridi.spotless-applier</id>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
     <name>Spotless Applier</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="lipiridi@gmail.com">lipiridi</vendor>
+    <vendor email="lipiridi@gmail.com" url="https://www.linkedin.com/in/lipiridi/">Dimitrii Lipiridi</vendor>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -22,23 +22,23 @@
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="Spotless Applier"/>
         <applicationService
-                serviceImplementation="com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState"/>
+                serviceImplementation="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState"/>
         <applicationConfigurable parentId="tools"
-                                 id="com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
-                                 instance="com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
+                                 id="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
+                                 instance="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
                                  displayName="Spotless Applier"/>
     </extensions>
 
     <actions>
-        <action id="com.lipiridi.spotless.applier.action.ReformatFileAction"
-                class="com.lipiridi.spotless.applier.action.ReformatFileAction"
+        <action id="com.github.lipiridi.spotless.applier.action.ReformatFileAction"
+                class="com.github.lipiridi.spotless.applier.action.ReformatFileAction"
                 text="Reformat File With Spotless"
                 description="Reformat file with Spotless">
             <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>
             <keyboard-shortcut first-keystroke="control alt SEMICOLON" keymap="$default"/>
         </action>
-        <action id="com.lipiridi.spotless.applier.action.ReformatAllFilesAction"
-                class="com.lipiridi.spotless.applier.action.ReformatAllFilesAction"
+        <action id="com.github.lipiridi.spotless.applier.action.ReformatAllFilesAction"
+                class="com.github.lipiridi.spotless.applier.action.ReformatAllFilesAction"
                 text="Reformat All Files With Spotless"
                 description="Reformat all files with Spotless">
             <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>

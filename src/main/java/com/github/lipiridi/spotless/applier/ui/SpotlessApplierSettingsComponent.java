@@ -1,4 +1,4 @@
-package com.lipiridi.spotless.applier.ui;
+package com.github.lipiridi.spotless.applier.ui;
 
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.util.ui.FormBuilder;

@@ -1,5 +1,7 @@
-package com.lipiridi.spotless.applier;
+package com.github.lipiridi.spotless.applier;
 
+import com.github.lipiridi.spotless.applier.enums.BuildTool;
+import com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState;
 import com.intellij.codeInsight.actions.AbstractLayoutCodeProcessor;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.codeInsight.actions.ReformatCodeProcessor;
@@ -20,9 +22,7 @@ import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.lipiridi.spotless.applier.enums.BuildTool;
-import com.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState;
+
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Objects;

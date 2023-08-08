@@ -1,4 +1,4 @@
-package com.lipiridi.spotless.applier;
+package com.github.lipiridi.spotless.applier;
 
 import com.intellij.codeInsight.actions.AbstractLayoutCodeProcessor;
 import com.intellij.execution.RunnerAndConfigurationSettings;

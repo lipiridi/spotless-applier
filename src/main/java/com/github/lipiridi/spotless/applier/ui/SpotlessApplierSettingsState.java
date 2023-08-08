@@ -1,4 +1,4 @@
-package com.lipiridi.spotless.applier.ui;
+package com.github.lipiridi.spotless.applier.ui;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Service
 @State(
-        name = "com.lipiridi.spotless.applier.ui.SpotlessSettingsState",
+        name = "com.github.lipiridi.spotless.applier.ui.SpotlessSettingsState",
         storages = {@Storage("spotless-applier.xml")})
 public final class SpotlessApplierSettingsState implements PersistentStateComponent<SpotlessApplierSettingsState> {
 

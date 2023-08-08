@@ -1,5 +1,6 @@
-package com.lipiridi.spotless.applier.action;
+package com.github.lipiridi.spotless.applier.action;
 
+import com.github.lipiridi.spotless.applier.ReformatProcessor;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -7,7 +8,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.lipiridi.spotless.applier.ReformatProcessor;
+
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 

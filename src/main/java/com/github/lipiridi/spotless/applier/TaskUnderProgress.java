@@ -1,4 +1,4 @@
-package com.lipiridi.spotless.applier;
+package com.github.lipiridi.spotless.applier;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionListener;

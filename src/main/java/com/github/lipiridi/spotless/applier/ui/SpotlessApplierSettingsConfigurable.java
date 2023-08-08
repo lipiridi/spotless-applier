@@ -1,4 +1,4 @@
-package com.lipiridi.spotless.applier.ui;
+package com.github.lipiridi.spotless.applier.ui;
 
 import com.intellij.openapi.options.Configurable;
 import javax.swing.*;
