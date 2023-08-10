@@ -6,6 +6,6 @@
 
 ## [1.0.0]
 ### Added
-- Ability to apply spotless both for gradle and maven based projects
-- Ability to apply for file opened in the editor or for the whole project
-- Ability to execute default "optimize import" before applying
+- Support for applying Spotless formatting to both Gradle and Maven based projects.
+- The ability to apply Spotless formatting to the currently opened file in the editor or to the entire project.
+- Introduced an option to execute the default "optimize import" task before applying Spotless formatting.

@@ -1,22 +1,31 @@
 # Spotless Applier
 
 [![Build](https://github.com/lipiridi/spotless-applier/workflows/Build/badge.svg)](https://github.com/lipiridi/spotless-applier/actions)
+[![Version](https://img.shields.io/jetbrains/plugin/v/22455.svg)](https://plugins.jetbrains.com/plugin/18321)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/22455.svg)](https://plugins.jetbrains.com/plugin/18321)
 
 <!-- Plugin description -->
-An IntelliJ plugin that allows running the [Spotless](https://github.com/diffplug/spotless) Gradle and Maven tasks 
-from within the IDE, either on the current file selected in the editor or for the whole project.
+The Spotless Applier IntelliJ Plugin enhances your development workflow
+by seamlessly integrating [Spotless](https://github.com/diffplug/spotless) Gradle and Maven tasks directly within the IntelliJ IDE.
+With this plugin, you can easily apply code formatting and style enforcement to your projects,
+either for the current file you're working on or for the entire project.
 
-Available actions:
+### Features
 * <kbd>Code</kbd> > <kbd>Reformat File With Spotless</kbd> (shortcut <kbd>Ctrl+Alt+;</kbd>)
-* <kbd>Code</kbd> > <kbd>Reformat All File With Spotless</kbd> (shortcut <kbd>Ctrl+Alt+Shift;</kbd>)
+* <kbd>Code</kbd> > <kbd>Reformat All File With Spotless</kbd> (shortcut <kbd>Ctrl+Alt+Shift+;</kbd>)
+
+### Settings
+
+To access plugin settings, go to: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Spotless Applier</kbd>
+* <kbd>Optimize imports before applying</kbd> > enable this option to additionally execute IntelliJ IDEA's default "optimize imports" task before applying Spotless formatting.
+<!-- Plugin description end -->
+
+### Media
 
 ![spotlessdemo](https://github.com/lipiridi/spotless-applier/assets/60580660/990e7bb9-8b75-4ca4-8973-f1fb2cf74e78)
-
-Settings:
-* <kbd>Optimize imports before applying</kbd> > it additionally executes default idea's "optimize import" task for current file or project
-
 ![image](https://github.com/lipiridi/spotless-applier/assets/60580660/ff867657-0e59-46b9-9b90-a7b72ce586bd)
-<!-- Plugin description end -->
+
+## Install
 
 ### Using IDE built-in plugin system:
 
