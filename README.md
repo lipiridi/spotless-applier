@@ -11,13 +11,13 @@ With this plugin, you can easily apply code formatting and style enforcement to 
 either for the current file you're working on or for the entire project.
 
 ### Features
-* <kbd>Code</kbd> > <kbd>Reformat File With Spotless</kbd> (shortcut <kbd>Ctrl+Alt+;</kbd>)
-* <kbd>Code</kbd> > <kbd>Reformat All File With Spotless</kbd> (shortcut <kbd>Ctrl+Alt+Shift+;</kbd>)
+* `Code` > `Reformat File With Spotless` (shortcut `Ctrl+Alt+;`)
+* `Code` > `Reformat All File With Spotless` (shortcut `Ctrl+Alt+Shift+;`)
 
 ### Settings
 
-To access plugin settings, go to: <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Spotless Applier</kbd>
-* <kbd>Optimize imports before applying</kbd> > enable this option to additionally execute IntelliJ IDEA's default "optimize imports" task before applying Spotless formatting.
+To access plugin settings, go to: `Settings` > `Tools` > `Spotless Applier`
+* `Optimize imports before applying` > enable this option to additionally execute IntelliJ IDEA's default "optimize imports" task before applying Spotless formatting.
 <!-- Plugin description end -->
 
 ### Media
