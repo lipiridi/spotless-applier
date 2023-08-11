@@ -28,19 +28,23 @@ public class SpotlessApplierSettingsConfigurable implements Configurable {
     @Override
     public boolean isModified() {
         SpotlessApplierSettingsState settings = SpotlessApplierSettingsState.getInstance();
-        return spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying()
-                != settings.optimizeImportsBeforeApplying;
+        return (spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying()
+                        != settings.optimizeImportsBeforeApplying)
+                || (spotlessApplierSettingsComponent.isProhibitAsteriskImports()
+                        != settings.prohibitImportsWithAsterisk);
     }
 
     @Override
     public void apply() {
         SpotlessApplierSettingsState settings = SpotlessApplierSettingsState.getInstance();
         settings.optimizeImportsBeforeApplying = spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying();
+        settings.prohibitImportsWithAsterisk = spotlessApplierSettingsComponent.isProhibitAsteriskImports();
     }
 
     @Override
     public void reset() {
         SpotlessApplierSettingsState settings = SpotlessApplierSettingsState.getInstance();
         spotlessApplierSettingsComponent.setOptimizeImportsBeforeApplying(settings.optimizeImportsBeforeApplying);
+        spotlessApplierSettingsComponent.setProhibitAsteriskImports(settings.prohibitImportsWithAsterisk);
     }
 }

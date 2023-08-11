@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public final class SpotlessApplierSettingsState implements PersistentStateComponent<SpotlessApplierSettingsState> {
 
     public boolean optimizeImportsBeforeApplying;
+    public boolean prohibitImportsWithAsterisk;
 
     public static SpotlessApplierSettingsState getInstance() {
         return ApplicationManager.getApplication().getService(SpotlessApplierSettingsState.class);
