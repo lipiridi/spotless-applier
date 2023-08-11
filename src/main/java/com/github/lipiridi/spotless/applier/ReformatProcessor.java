@@ -1,9 +1,6 @@
 package com.github.lipiridi.spotless.applier;
 
 import com.github.lipiridi.spotless.applier.enums.BuildTool;
-import com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState;
-import com.intellij.codeInsight.actions.AbstractLayoutCodeProcessor;
-import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.execution.Executor;
 import com.intellij.execution.RunnerAndConfigurationSettings;
@@ -22,9 +19,9 @@ import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.gradle.util.GradleVersion;
@@ -84,6 +81,8 @@ public class ReformatProcessor {
             return;
         }
 
+        optimizeImports();
+
         switch (Objects.requireNonNull(buildTool)) {
             case GRADLE -> executeGradleTask();
             case MAVEN -> executeMavenTask();
@@ -108,16 +107,7 @@ public class ReformatProcessor {
     }
 
     private void executeGradleTask() {
-        String noConfigCacheOption = shouldAddNoConfigCacheOption() ? " --no-configuration-cache" : "";
-
-        ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
-        externalSettings.setExternalProjectPath(projectBasePath);
-        externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
-        externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
-        if (!reformatAllFiles) {
-            externalSettings.setScriptParameters(String.format(
-                    "-PspotlessIdeHook=\"%s\"%s", psiFile.getVirtualFile().getPath(), noConfigCacheOption));
-        }
+        ExternalSystemTaskExecutionSettings externalSettings = getGradleSystemTaskExecutionSettings();
 
         ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
@@ -125,8 +115,25 @@ public class ReformatProcessor {
                 project,
                 GradleConstants.SYSTEM_ID,
                 reformatTaskCallback,
-                document,
-                getOptimizeImportProcessor());
+                document);
+    }
+
+    @NotNull private ExternalSystemTaskExecutionSettings getGradleSystemTaskExecutionSettings() {
+        final String noConfigCacheOption = shouldAddNoConfigCacheOption() ? "--no-configuration-cache" : "";
+        String scriptParameters = "";
+
+        ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
+        externalSettings.setExternalProjectPath(projectBasePath);
+        externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
+        externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
+        if (!reformatAllFiles) {
+            scriptParameters = String.format(
+                    "-PspotlessIdeHook=\"%s\" ", psiFile.getVirtualFile().getPath());
+        }
+
+        externalSettings.setScriptParameters(scriptParameters + noConfigCacheOption);
+
+        return externalSettings;
     }
 
     private boolean shouldAddNoConfigCacheOption() {
@@ -145,12 +152,12 @@ public class ReformatProcessor {
     }
 
     private void executeMavenTask() {
-        final String command = "spotless:apply";
+        List<String> commands = Collections.singletonList("spotless:apply");
 
         ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
-        externalSettings.setTaskNames(Collections.singletonList(command));
+        externalSettings.setTaskNames(commands);
 
-        ExecutionEnvironment environment = getMavenExecutionEnvironment(command);
+        ExecutionEnvironment environment = getMavenExecutionEnvironment(commands);
 
         ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
@@ -159,18 +166,17 @@ public class ReformatProcessor {
                 MavenUtil.SYSTEM_ID,
                 reformatTaskCallback,
                 document,
-                getOptimizeImportProcessor(),
                 environment);
     }
 
-    @NotNull private ExecutionEnvironment getMavenExecutionEnvironment(String command) {
+    @NotNull private ExecutionEnvironment getMavenExecutionEnvironment(List<String> commands) {
         MavenRunner mavenRunner = MavenRunner.getInstance(project);
 
         MavenRunnerSettings settings = mavenRunner.getState().clone();
 
         MavenRunnerParameters params = new MavenRunnerParameters();
         params.setWorkingDirPath(projectBasePath);
-        params.setGoals(Collections.singletonList(command));
+        params.setGoals(commands);
 
         if (!reformatAllFiles) {
             settings.setVmOptions(String.format(
@@ -191,12 +197,11 @@ public class ReformatProcessor {
         return new ExecutionEnvironment(executor, runner, configSettings, project);
     }
 
-    private AbstractLayoutCodeProcessor getOptimizeImportProcessor() {
-        SpotlessApplierSettingsState instance = SpotlessApplierSettingsState.getInstance();
-        if (!instance.optimizeImportsBeforeApplying) {
-            return null;
-        }
+    private void optimizeImports() {
+        SynchronousOptimizeImportsProcessor synchronousOptimizeImportsProcessor = psiFile == null
+                ? new SynchronousOptimizeImportsProcessor(project)
+                : new SynchronousOptimizeImportsProcessor(project, psiFile);
 
-        return psiFile == null ? new OptimizeImportsProcessor(project) : new OptimizeImportsProcessor(project, psiFile);
+        synchronousOptimizeImportsProcessor.run();
     }
 }

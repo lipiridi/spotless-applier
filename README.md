@@ -12,18 +12,19 @@ either for the current file you're working on or for the entire project.
 
 ### Features
 * `Code` > `Reformat File With Spotless` (shortcut `Ctrl+Alt+;`)
-* `Code` > `Reformat All File With Spotless` (shortcut `Ctrl+Alt+Shift+;`)
+* `Code` > `Reformat All Files With Spotless` (shortcut `Ctrl+Alt+Shift+;`)
 
 ### Settings
 
 To access plugin settings, go to: `Settings` > `Tools` > `Spotless Applier`
 * `Optimize imports before applying` > enable this option to additionally execute IntelliJ IDEA's default "optimize imports" task before applying Spotless formatting.
+* `Prohibit imports with asterisk '*'` > prevents imports with the asterisk symbol during the "optimize imports" task. When enabled, any imports that use the '*' symbol to import all classes from a package will be replaced with FQN.
 <!-- Plugin description end -->
 
 ### Media
 
 ![spotlessdemo](https://github.com/lipiridi/spotless-applier/assets/60580660/990e7bb9-8b75-4ca4-8973-f1fb2cf74e78)
-![image](https://github.com/lipiridi/spotless-applier/assets/60580660/ff867657-0e59-46b9-9b90-a7b72ce586bd)
+![image](https://github.com/lipiridi/spotless-applier/assets/60580660/325f9a82-0101-48ea-b2d5-d7440665e065)
 
 ## Install
 

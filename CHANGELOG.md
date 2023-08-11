@@ -3,6 +3,8 @@
 # Spotless Applier Plugin Changelog
 
 ## [Unreleased]
+### Added
+- Option that prohibit imports with asterisk '*' during "optimize imports" task. It temporarily replaces import settings
 
 ## [1.0.0]
 ### Added

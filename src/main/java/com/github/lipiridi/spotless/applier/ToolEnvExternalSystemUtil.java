@@ -1,6 +1,5 @@
 package com.github.lipiridi.spotless.applier;
 
-import com.intellij.codeInsight.actions.AbstractLayoutCodeProcessor;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.diagnostic.Logger;
@@ -25,19 +24,10 @@ public final class ToolEnvExternalSystemUtil {
             final @NotNull Project project,
             final @NotNull ProjectSystemId externalSystemId,
             final @Nullable TaskCallback callback,
-            final @Nullable Document document,
-            final @Nullable AbstractLayoutCodeProcessor prepareCodeProcessor) {
+            final @Nullable Document document) {
         ExecutionEnvironment environment =
                 ExternalSystemUtil.createExecutionEnvironment(project, externalSystemId, taskSettings, executorId);
-        runTask(
-                taskSettings,
-                executorId,
-                project,
-                externalSystemId,
-                callback,
-                document,
-                prepareCodeProcessor,
-                environment);
+        runTask(taskSettings, executorId, project, externalSystemId, callback, document, environment);
     }
 
     public static void runTask(
@@ -47,7 +37,6 @@ public final class ToolEnvExternalSystemUtil {
             final @NotNull ProjectSystemId externalSystemId,
             final @Nullable TaskCallback callback,
             final @Nullable Document document,
-            final @Nullable AbstractLayoutCodeProcessor prepareCodeProcessor,
             final ExecutionEnvironment environment) {
         if (environment == null) {
             LOG.warn("Execution environment for " + externalSystemId + " is null");
@@ -62,7 +51,7 @@ public final class ToolEnvExternalSystemUtil {
 
         final String title = project.getName() + " " + taskSettings.getTaskNames();
 
-        Task task = getTask(project, document, title, taskUnderProgress, externalSystemId, prepareCodeProcessor);
+        Task task = getTask(project, document, title, taskUnderProgress, externalSystemId);
 
         task.queue();
     }
@@ -72,25 +61,18 @@ public final class ToolEnvExternalSystemUtil {
             Document document,
             String title,
             TaskUnderProgress taskUnderProgress,
-            ProjectSystemId externalSystemId,
-            AbstractLayoutCodeProcessor prepareCodeProcessor) {
+            ProjectSystemId externalSystemId) {
         // Currently not found the way to run gradle task synchronously
         // https://intellij-support.jetbrains.com/hc/en-us/community/posts/12849664786322-Execute-Gradle-task-in-ProgressExecutionMode-MODAL-SYNC
+        // https://youtrack.jetbrains.com/issue/IDEA-327879
         if (document == null && !externalSystemId.equals(GradleConstants.SYSTEM_ID)) {
             return new Task.Modal(project, title, false) {
                 @Override
                 public void run(@NotNull ProgressIndicator indicator) {
-                    if (prepareCodeProcessor != null) {
-                        prepareCodeProcessor.run();
-                    }
                     taskUnderProgress.execute(indicator);
                 }
             };
         } else {
-            // AbstractLayoutCodeProcessor cannot be run in background thread
-            if (prepareCodeProcessor != null) {
-                prepareCodeProcessor.run();
-            }
             return new Task.Backgroundable(project, title) {
                 @Override
                 public void run(@NotNull ProgressIndicator indicator) {
