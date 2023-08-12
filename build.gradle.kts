@@ -10,6 +10,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.15.0"
     id("org.jetbrains.changelog") version "2.1.2"
     id("org.jetbrains.kotlinx.kover") version "0.7.3"
+    id("com.diffplug.spotless") version "6.20.0"
 }
 
 group = properties("pluginGroup").get()
@@ -108,5 +109,16 @@ tasks {
     publishPlugin {
         dependsOn("patchChangelog")
         token = environment("PUBLISH_TOKEN")
+    }
+}
+
+spotless {
+    java {
+        target("src/*/java/**/*.java")
+
+        palantirJavaFormat()
+        removeUnusedImports()
+        importOrder()
+        formatAnnotations()
     }
 }
