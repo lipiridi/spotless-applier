@@ -50,6 +50,9 @@ For applying changes only for current file it uses:
 Thanks to [Ryan Gurney](https://github.com/ragurney) for his [Spotless IntelliJ Gradle](https://github.com/ragurney/spotless-intellij-gradle) plugin
 which I used as the basis for this plugin.
 
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
 ## Release Notes
 See [CHANGELOG.md](CHANGELOG.md)
 
