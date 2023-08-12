@@ -1,3 +1,4 @@
+import com.diffplug.spotless.LineEnding
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 
@@ -10,6 +11,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.15.0"
     id("org.jetbrains.changelog") version "2.1.2"
     id("org.jetbrains.kotlinx.kover") version "0.7.3"
+    id("com.diffplug.spotless") version "6.20.0"
 }
 
 group = properties("pluginGroup").get()
@@ -108,5 +110,19 @@ tasks {
     publishPlugin {
         dependsOn("patchChangelog")
         token = environment("PUBLISH_TOKEN")
+    }
+}
+
+spotless {
+    //https://github.com/diffplug/spotless/issues/1644
+    lineEndings = LineEnding.PLATFORM_NATIVE //or any other except GIT_ATTRIBUTES
+
+    java {
+        target("src/*/java/**/*.java")
+
+        palantirJavaFormat()
+        removeUnusedImports()
+        importOrder()
+        formatAnnotations()
     }
 }
