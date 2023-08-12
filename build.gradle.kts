@@ -1,3 +1,4 @@
+import com.diffplug.spotless.LineEnding
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 
@@ -113,6 +114,9 @@ tasks {
 }
 
 spotless {
+    //https://github.com/diffplug/spotless/issues/1644
+    lineEndings = LineEnding.PLATFORM_NATIVE //or any other except GIT_ATTRIBUTES
+
     java {
         target("src/*/java/**/*.java")
 
