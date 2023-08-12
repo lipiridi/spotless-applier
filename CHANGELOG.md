@@ -9,7 +9,7 @@
 ### Added
 - Option that prohibit imports with asterisk '*' during "optimize imports" task. It temporarily replaces import settings
 
-## [1.0.0]
+## [1.0.0] - 2023-08-10
 
 ### Added
 - Support for applying Spotless formatting to both Gradle and Maven based projects.
