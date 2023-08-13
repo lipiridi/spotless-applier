@@ -14,12 +14,14 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
+import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.util.Version;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -42,11 +44,12 @@ public class ReformatProcessor {
     private static final NotificationGroup NOTIFICATION_GROUP =
             NotificationGroupManager.getInstance().getNotificationGroup("Spotless Applier");
     private final Project project;
-    private final String projectBasePath;
     private final ReformatTaskCallback reformatTaskCallback;
     private final Document document;
     private final PsiFile psiFile;
     private final boolean reformatAllFiles;
+    private BuildTool buildTool;
+    private String modulePath;
 
     public ReformatProcessor(@NotNull Project project) {
         this(project, null, null);
@@ -54,30 +57,23 @@ public class ReformatProcessor {
 
     public ReformatProcessor(@NotNull Project project, Document document, PsiFile psiFile) {
         this.project = project;
-        this.projectBasePath = project.getBasePath();
         this.document = document;
         this.psiFile = psiFile;
         this.reformatAllFiles = document == null;
         this.reformatTaskCallback = new ReformatTaskCallback(project, NOTIFICATION_GROUP, document);
+
+        fillModulePathAndBuildTool();
     }
 
     public void run() {
-        if (projectBasePath == null) {
-            return;
-        }
-
-        VirtualFile baseVirtualFile = VfsUtil.findFile(Path.of(projectBasePath), true);
-
-        if (baseVirtualFile == null) {
-            return;
-        }
-
-        BuildTool buildTool = resolveBuildTool(baseVirtualFile);
-
         if (buildTool == null) {
             NOTIFICATION_GROUP
                     .createNotification("Unable to resolve build tool", NotificationType.ERROR)
                     .notify(project);
+            return;
+        }
+
+        if (modulePath == null) {
             return;
         }
 
@@ -89,21 +85,43 @@ public class ReformatProcessor {
         }
     }
 
-    private BuildTool resolveBuildTool(VirtualFile file) {
-        if (!file.isDirectory()) {
-            return null;
-        }
-        for (VirtualFile child : file.getChildren()) {
-            switch (child.getName()) {
-                case "settings.gradle", "settings.gradle.kts", "build.gradle", "build.gradle.kts" -> {
-                    return BuildTool.GRADLE;
-                }
-                case "pom.xml" -> {
-                    return BuildTool.MAVEN;
-                }
+    private void fillModulePathAndBuildTool() {
+        // Check if task is started for whole project
+        if (psiFile == null) {
+            VirtualFile projectFile = project.getProjectFile();
+            if (projectFile == null) {
+                return;
             }
+            Module moduleForFile = ModuleUtil.findModuleForFile(projectFile, project);
+            buildTool = resolveBuildTool(moduleForFile);
+            modulePath = projectFile.getPath();
+
+            return;
         }
-        return null;
+
+        Module module = ModuleUtil.findModuleForFile(psiFile);
+        if (module == null) {
+            return;
+        }
+
+        buildTool = resolveBuildTool(module);
+
+        if (buildTool == null) {
+            return;
+        }
+
+        // Check if module is gradle or maven based
+        modulePath = switch (buildTool) {
+            case GRADLE -> ExternalSystemApiUtil.getExternalProjectPath(module);
+            case MAVEN -> Optional.ofNullable(ProjectUtil.guessModuleDir(module))
+                    .map(VirtualFile::getPath)
+                    .orElse(null);};
+    }
+
+    private BuildTool resolveBuildTool(Module module) {
+        return ExternalSystemApiUtil.isExternalSystemAwareModule(GradleConstants.SYSTEM_ID, module)
+                ? BuildTool.GRADLE
+                : MavenUtil.isMavenModule(module) ? BuildTool.MAVEN : null;
     }
 
     private void executeGradleTask() {
@@ -123,7 +141,7 @@ public class ReformatProcessor {
         String scriptParameters = "";
 
         ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
-        externalSettings.setExternalProjectPath(projectBasePath);
+        externalSettings.setExternalProjectPath(modulePath);
         externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
         if (!reformatAllFiles) {
@@ -136,9 +154,10 @@ public class ReformatProcessor {
         return externalSettings;
     }
 
+    //TODO create option in settings to enable/disable cache
     private boolean shouldAddNoConfigCacheOption() {
         Optional<GradleProjectSettings> maybeProjectSettings =
-                Optional.ofNullable(GradleSettings.getInstance(project).getLinkedProjectSettings(projectBasePath));
+                Optional.ofNullable(GradleSettings.getInstance(project).getLinkedProjectSettings(modulePath));
 
         if (maybeProjectSettings.isEmpty()) {
             LOG.warn("Unable to parse linked project settings, leaving off `--no-configuration-cache` argument");
@@ -175,7 +194,7 @@ public class ReformatProcessor {
         MavenRunnerSettings settings = mavenRunner.getState().clone();
 
         MavenRunnerParameters params = new MavenRunnerParameters();
-        params.setWorkingDirPath(projectBasePath);
+        params.setWorkingDirPath(modulePath);
         params.setGoals(commands);
 
         if (!reformatAllFiles) {
