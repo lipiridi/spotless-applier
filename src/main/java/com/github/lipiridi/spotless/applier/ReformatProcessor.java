@@ -18,7 +18,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Version;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import java.util.Collections;
 import java.util.List;
@@ -42,25 +41,36 @@ public class ReformatProcessor {
     private static final NotificationGroup NOTIFICATION_GROUP =
             NotificationGroupManager.getInstance().getNotificationGroup("Spotless Applier");
     private final Project project;
-    private final ReformatTaskCallback reformatTaskCallback;
-    private final Document document;
-    private final PsiFile psiFile;
-    private final boolean reformatAllFiles;
+    private ReformatTaskCallback reformatTaskCallback;
+    private Document document;
+    private PsiFile psiFile;
+    private boolean reformatSpecificFile;
+    private Module module;
     private BuildTool buildTool;
     private String modulePath;
 
-    public ReformatProcessor(@NotNull Project project) {
-        this(project, null, null);
+    public ReformatProcessor(@NotNull Project project, @NotNull ModuleInfo moduleInfo) {
+        this.project = project;
+        this.module = moduleInfo.module();
+        this.buildTool = moduleInfo.buildTool();
+        this.modulePath = moduleInfo.path();
     }
 
-    public ReformatProcessor(@NotNull Project project, Document document, PsiFile psiFile) {
+    public ReformatProcessor(@NotNull Project project, @NotNull Document document, @NotNull PsiFile psiFile) {
         this.project = project;
+        this.reformatSpecificFile = true;
         this.document = document;
         this.psiFile = psiFile;
-        this.reformatAllFiles = document == null;
         this.reformatTaskCallback = new ReformatTaskCallback(project, NOTIFICATION_GROUP, document);
 
-        fillModulePathAndBuildTool();
+        Module module = ModuleUtil.findModuleForFile(psiFile);
+        if (module != null) {
+            this.buildTool = BuildTool.resolveBuildTool(module);
+
+            if (buildTool != null) {
+                this.modulePath = buildTool.getModulePath(module);
+            }
+        }
     }
 
     public void run() {
@@ -83,34 +93,6 @@ public class ReformatProcessor {
         }
     }
 
-    private void fillModulePathAndBuildTool() {
-        // Check if task is started for whole project
-        if (psiFile == null) {
-            VirtualFile projectFile = project.getProjectFile();
-            if (projectFile == null) {
-                return;
-            }
-            Module moduleForFile = ModuleUtil.findModuleForFile(projectFile, project);
-            buildTool = BuildTool.resolveBuildTool(moduleForFile);
-            modulePath = projectFile.getPath();
-
-            return;
-        }
-
-        Module module = ModuleUtil.findModuleForFile(psiFile);
-        if (module == null) {
-            return;
-        }
-
-        buildTool = BuildTool.resolveBuildTool(module);
-
-        if (buildTool == null) {
-            return;
-        }
-
-        modulePath = buildTool.getModulePath(module);
-    }
-
     private void executeGradleTask() {
         ExternalSystemTaskExecutionSettings externalSettings = getGradleSystemTaskExecutionSettings();
 
@@ -123,20 +105,19 @@ public class ReformatProcessor {
                 document);
     }
 
-    @NotNull private ExternalSystemTaskExecutionSettings getGradleSystemTaskExecutionSettings() {
-        final String noConfigCacheOption = shouldAddNoConfigCacheOption() ? "--no-configuration-cache" : "";
-        String scriptParameters = "";
+    private ExternalSystemTaskExecutionSettings getGradleSystemTaskExecutionSettings() {
+        String scriptParameters = shouldAddNoConfigCacheOption() ? "--no-configuration-cache" : "";
 
         ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
         externalSettings.setExternalProjectPath(modulePath);
         externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
-        if (!reformatAllFiles) {
+        if (reformatSpecificFile) {
             scriptParameters = String.format(
-                    "-PspotlessIdeHook=\"%s\" ", psiFile.getVirtualFile().getPath());
+                    "-PspotlessIdeHook=\"%s\"%s", psiFile.getVirtualFile().getPath(), scriptParameters);
         }
 
-        externalSettings.setScriptParameters(scriptParameters + noConfigCacheOption);
+        externalSettings.setScriptParameters(scriptParameters);
 
         return externalSettings;
     }
@@ -184,7 +165,7 @@ public class ReformatProcessor {
         params.setWorkingDirPath(modulePath);
         params.setGoals(commands);
 
-        if (!reformatAllFiles) {
+        if (reformatSpecificFile) {
             settings.setVmOptions(String.format(
                     "-DspotlessFiles=\"%s\"",
                     psiFile.getVirtualFile()
@@ -204,9 +185,9 @@ public class ReformatProcessor {
     }
 
     private void optimizeImports() {
-        SynchronousOptimizeImportsProcessor synchronousOptimizeImportsProcessor = psiFile == null
-                ? new SynchronousOptimizeImportsProcessor(project)
-                : new SynchronousOptimizeImportsProcessor(project, psiFile);
+        var synchronousOptimizeImportsProcessor = reformatSpecificFile
+                ? new SynchronousOptimizeImportsProcessor(project, psiFile)
+                : new SynchronousOptimizeImportsProcessor(project, module);
 
         synchronousOptimizeImportsProcessor.run();
     }

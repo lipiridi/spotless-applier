@@ -25,7 +25,7 @@ public class SelectModuleDialog extends DialogWrapper {
     protected JComponent createCenterPanel() {
         JPanel dialogPanel = new JPanel(new BorderLayout());
 
-        moduleNames.forEach(moduleName -> moduleList.addItem(moduleName, moduleName, true));
+        moduleNames.forEach(moduleName -> moduleList.addItem(moduleName, moduleName, false));
 
         JScrollPane scrollPane = new JBScrollPane(moduleList);
         dialogPanel.add(scrollPane, BorderLayout.CENTER);

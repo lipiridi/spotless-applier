@@ -13,7 +13,7 @@ public enum BuildTool {
     MAVEN,
     GRADLE;
 
-    public static BuildTool resolveBuildTool(Module module) {
+    @Nullable public static BuildTool resolveBuildTool(Module module) {
         return ExternalSystemApiUtil.isExternalSystemAwareModule(GradleConstants.SYSTEM_ID, module)
                 ? BuildTool.GRADLE
                 : MavenUtil.isMavenModule(module) ? BuildTool.MAVEN : null;

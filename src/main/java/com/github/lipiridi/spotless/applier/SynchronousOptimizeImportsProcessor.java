@@ -7,6 +7,7 @@ import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
 import com.intellij.core.CoreBundle;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
@@ -26,6 +27,10 @@ public class SynchronousOptimizeImportsProcessor extends OptimizeImportsProcesso
 
     public SynchronousOptimizeImportsProcessor(@NotNull Project project) {
         super(project);
+    }
+
+    public SynchronousOptimizeImportsProcessor(@NotNull Project project, @NotNull Module module) {
+        super(project, module);
     }
 
     public SynchronousOptimizeImportsProcessor(@NotNull Project project, @NotNull PsiFile file) {
