@@ -51,7 +51,7 @@ public final class ToolEnvExternalSystemUtil {
 
         final TaskUnderProgress taskUnderProgress = new TaskUnderProgress(executorId, project, callback, environment);
 
-        final String title = project.getName() + " " + taskSettings.getTaskNames();
+        final String title = moduleName + " " + taskSettings.getTaskNames();
 
         Task task = getTask(project, document, title, taskUnderProgress, externalSystemId);
 

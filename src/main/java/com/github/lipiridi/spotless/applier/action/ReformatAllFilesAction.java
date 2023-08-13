@@ -61,8 +61,9 @@ public class ReformatAllFilesAction extends AnAction {
             if (projectModuleInfo != null && selectModuleDialog.isApplyOnRootProject()) {
                 new ReformatProcessor(project, projectModuleInfo).run();
             } else {
-                List<String> selectedModules = selectModuleDialog.getSelectedModules();
-                selectedModules.forEach(module -> new ReformatProcessor(project, availableModules.get(module)).run());
+                selectModuleDialog
+                        .getSelectedModules()
+                        .forEach(module -> new ReformatProcessor(project, availableModules.get(module)).run());
             }
         }
     }

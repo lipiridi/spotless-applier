@@ -25,10 +25,6 @@ public class SynchronousOptimizeImportsProcessor extends OptimizeImportsProcesso
 
     private PsiFile myFile;
 
-    public SynchronousOptimizeImportsProcessor(@NotNull Project project) {
-        super(project);
-    }
-
     public SynchronousOptimizeImportsProcessor(@NotNull Project project, @NotNull Module module) {
         super(project, module);
     }
