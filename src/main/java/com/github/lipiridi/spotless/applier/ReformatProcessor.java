@@ -100,6 +100,7 @@ public class ReformatProcessor {
                 externalSettings,
                 DefaultRunExecutor.EXECUTOR_ID,
                 project,
+                getModuleName(),
                 GradleConstants.SYSTEM_ID,
                 reformatTaskCallback,
                 document);
@@ -150,6 +151,7 @@ public class ReformatProcessor {
                 externalSettings,
                 DefaultRunExecutor.EXECUTOR_ID,
                 project,
+                getModuleName(),
                 MavenUtil.SYSTEM_ID,
                 reformatTaskCallback,
                 document,
@@ -190,5 +192,9 @@ public class ReformatProcessor {
                 : new SynchronousOptimizeImportsProcessor(project, module);
 
         synchronousOptimizeImportsProcessor.run();
+    }
+
+    private String getModuleName() {
+        return module == null ? project.getName() : module.getName();
     }
 }

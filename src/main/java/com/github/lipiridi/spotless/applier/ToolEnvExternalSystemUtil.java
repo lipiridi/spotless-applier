@@ -22,18 +22,20 @@ public final class ToolEnvExternalSystemUtil {
             final @NotNull ExternalSystemTaskExecutionSettings taskSettings,
             final @NotNull String executorId,
             final @NotNull Project project,
+            final @NotNull String moduleName,
             final @NotNull ProjectSystemId externalSystemId,
             final @Nullable TaskCallback callback,
             final @Nullable Document document) {
         ExecutionEnvironment environment =
                 ExternalSystemUtil.createExecutionEnvironment(project, externalSystemId, taskSettings, executorId);
-        runTask(taskSettings, executorId, project, externalSystemId, callback, document, environment);
+        runTask(taskSettings, executorId, project, moduleName, externalSystemId, callback, document, environment);
     }
 
     public static void runTask(
             final @NotNull ExternalSystemTaskExecutionSettings taskSettings,
             final @NotNull String executorId,
             final @NotNull Project project,
+            final @NotNull String moduleName,
             final @NotNull ProjectSystemId externalSystemId,
             final @Nullable TaskCallback callback,
             final @Nullable Document document,
