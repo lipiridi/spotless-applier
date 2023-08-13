@@ -14,11 +14,9 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
-import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -93,7 +91,7 @@ public class ReformatProcessor {
                 return;
             }
             Module moduleForFile = ModuleUtil.findModuleForFile(projectFile, project);
-            buildTool = resolveBuildTool(moduleForFile);
+            buildTool = BuildTool.resolveBuildTool(moduleForFile);
             modulePath = projectFile.getPath();
 
             return;
@@ -104,24 +102,13 @@ public class ReformatProcessor {
             return;
         }
 
-        buildTool = resolveBuildTool(module);
+        buildTool = BuildTool.resolveBuildTool(module);
 
         if (buildTool == null) {
             return;
         }
 
-        // Check if module is gradle or maven based
-        modulePath = switch (buildTool) {
-            case GRADLE -> ExternalSystemApiUtil.getExternalProjectPath(module);
-            case MAVEN -> Optional.ofNullable(ProjectUtil.guessModuleDir(module))
-                    .map(VirtualFile::getPath)
-                    .orElse(null);};
-    }
-
-    private BuildTool resolveBuildTool(Module module) {
-        return ExternalSystemApiUtil.isExternalSystemAwareModule(GradleConstants.SYSTEM_ID, module)
-                ? BuildTool.GRADLE
-                : MavenUtil.isMavenModule(module) ? BuildTool.MAVEN : null;
+        modulePath = buildTool.getModulePath(module);
     }
 
     private void executeGradleTask() {
@@ -154,7 +141,7 @@ public class ReformatProcessor {
         return externalSettings;
     }
 
-    //TODO create option in settings to enable/disable cache
+    // TODO create option in settings to enable/disable cache
     private boolean shouldAddNoConfigCacheOption() {
         Optional<GradleProjectSettings> maybeProjectSettings =
                 Optional.ofNullable(GradleSettings.getInstance(project).getLinkedProjectSettings(modulePath));
