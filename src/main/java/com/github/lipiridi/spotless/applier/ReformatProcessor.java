@@ -1,6 +1,7 @@
 package com.github.lipiridi.spotless.applier;
 
 import com.github.lipiridi.spotless.applier.enums.BuildTool;
+import com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState;
 import com.intellij.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.execution.Executor;
 import com.intellij.execution.RunnerAndConfigurationSettings;
@@ -40,6 +41,7 @@ public class ReformatProcessor {
     private static final Version NO_CONFIG_CACHE_MIN_GRADLE_VERSION = new Version(6, 6, 0);
     private static final NotificationGroup NOTIFICATION_GROUP =
             NotificationGroupManager.getInstance().getNotificationGroup("Spotless Applier");
+    private final SpotlessApplierSettingsState spotlessSettings = SpotlessApplierSettingsState.getInstance();
     private final Project project;
     private ReformatTaskCallback reformatTaskCallback;
     private Document document;
@@ -123,8 +125,11 @@ public class ReformatProcessor {
         return externalSettings;
     }
 
-    // TODO create option in settings to enable/disable cache
     private boolean shouldAddNoConfigCacheOption() {
+        if (spotlessSettings.allowGradleCache) {
+            return false;
+        }
+
         Optional<GradleProjectSettings> maybeProjectSettings =
                 Optional.ofNullable(GradleSettings.getInstance(project).getLinkedProjectSettings(modulePath));
 
@@ -187,9 +192,15 @@ public class ReformatProcessor {
     }
 
     private void optimizeImports() {
+        if (!spotlessSettings.optimizeImportsBeforeApplying) {
+            return;
+        }
+
         var synchronousOptimizeImportsProcessor = reformatSpecificFile
-                ? new SynchronousOptimizeImportsProcessor(project, psiFile)
-                : new SynchronousOptimizeImportsProcessor(project, module);
+                ? new SynchronousOptimizeImportsProcessor(
+                        project, spotlessSettings.prohibitImportsWithAsterisk, psiFile)
+                : new SynchronousOptimizeImportsProcessor(
+                        project, spotlessSettings.prohibitImportsWithAsterisk, module);
 
         synchronousOptimizeImportsProcessor.run();
     }

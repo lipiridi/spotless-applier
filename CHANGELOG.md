@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+### Added
+- Option that allow Gradle's configuration cache for 'apply' task
+
 ## [1.0.1] - 2023-08-11
 
 ### Added

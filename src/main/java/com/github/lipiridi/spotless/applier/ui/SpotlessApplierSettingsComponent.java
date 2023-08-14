@@ -7,6 +7,7 @@ import javax.swing.*;
 public class SpotlessApplierSettingsComponent {
 
     private final JPanel myMainPanel;
+    private final JCheckBox isAllowGradleCacheCheckBox = new JBCheckBox("Allow Gradle cache for 'apply' task");
     private final JCheckBox isOptimizeImportsBeforeApplyingCheckBox =
             new JBCheckBox("Optimize imports before applying");
     private final JCheckBox isProhibitImportsWithAsteriskCheckBox =
@@ -27,7 +28,11 @@ public class SpotlessApplierSettingsComponent {
                 .addComponent(isProhibitImportsWithAsteriskCheckBox)
                 .getPanel();
 
+        isAllowGradleCacheCheckBox.setToolTipText(
+                "Starting from version 6.0.0, Spotless supports Gradle's configuration cache. If you want to use it, please enable this checkbox.");
+
         myMainPanel = FormBuilder.createFormBuilder()
+                .addComponent(isAllowGradleCacheCheckBox)
                 .addComponent(isOptimizeImportsBeforeApplyingCheckBox)
                 .addComponent(secondRow)
                 .addComponentFillVertically(new JPanel(), 0)
@@ -36,6 +41,14 @@ public class SpotlessApplierSettingsComponent {
 
     public JPanel getPanel() {
         return myMainPanel;
+    }
+
+    public boolean isAllowGradleCache() {
+        return isAllowGradleCacheCheckBox.isSelected();
+    }
+
+    public void setAllowGradleCache(boolean value) {
+        isAllowGradleCacheCheckBox.setSelected(value);
     }
 
     public boolean isOptimizeImportsBeforeApplying() {

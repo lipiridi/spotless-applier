@@ -1,6 +1,5 @@
 package com.github.lipiridi.spotless.applier;
 
-import com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState;
 import com.intellij.application.options.CodeStyle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
@@ -23,25 +22,25 @@ import org.jetbrains.annotations.NotNull;
 // Custom implementation, because we can't optimize imports for specific file with temporary settings
 public class SynchronousOptimizeImportsProcessor extends OptimizeImportsProcessor {
 
+    private final boolean prohibitImportsWithAsterisk;
     private PsiFile myFile;
 
-    public SynchronousOptimizeImportsProcessor(@NotNull Project project, @NotNull Module module) {
+    public SynchronousOptimizeImportsProcessor(
+            @NotNull Project project, boolean prohibitImportsWithAsterisk, @NotNull Module module) {
         super(project, module);
+        this.prohibitImportsWithAsterisk = prohibitImportsWithAsterisk;
     }
 
-    public SynchronousOptimizeImportsProcessor(@NotNull Project project, @NotNull PsiFile file) {
+    public SynchronousOptimizeImportsProcessor(
+            @NotNull Project project, boolean prohibitImportsWithAsterisk, @NotNull PsiFile file) {
         super(project, file);
         myFile = file;
+        this.prohibitImportsWithAsterisk = prohibitImportsWithAsterisk;
     }
 
     @Override
     public void run() {
-        SpotlessApplierSettingsState settingsState = SpotlessApplierSettingsState.getInstance();
-        if (!settingsState.optimizeImportsBeforeApplying) {
-            return;
-        }
-
-        if (settingsState.prohibitImportsWithAsterisk) {
+        if (prohibitImportsWithAsterisk) {
             CodeStyleSettings currentSettings = CodeStyle.getSettings(myProject);
             CodeStyle.doWithTemporarySettings(myProject, currentSettings, codeStyleSettings -> {
                 JavaCodeStyleSettings javaSettings = codeStyleSettings.getCustomSettings(JavaCodeStyleSettings.class);
