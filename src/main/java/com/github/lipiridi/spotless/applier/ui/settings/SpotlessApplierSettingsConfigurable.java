@@ -1,5 +1,6 @@
-package com.github.lipiridi.spotless.applier.ui;
+package com.github.lipiridi.spotless.applier.ui.settings;
 
+import com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsComponent;
 import com.intellij.openapi.options.Configurable;
 import javax.swing.*;
 import org.jetbrains.annotations.Nls;

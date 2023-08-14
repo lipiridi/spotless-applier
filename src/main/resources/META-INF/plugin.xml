@@ -22,10 +22,10 @@
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="Spotless Applier"/>
         <applicationService
-                serviceImplementation="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState"/>
+                serviceImplementation="com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsState"/>
         <applicationConfigurable parentId="tools"
-                                 id="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
-                                 instance="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
+                                 id="com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsConfigurable"
+                                 instance="com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsConfigurable"
                                  displayName="Spotless Applier"/>
     </extensions>
 

@@ -55,16 +55,19 @@ public class ReformatAllFilesAction extends AnAction {
             }
         }
 
-        SelectModuleDialog selectModuleDialog = new SelectModuleDialog(modulesForDialog, projectModuleInfo != null);
+        SelectModuleDialog selectModuleDialog =
+                new SelectModuleDialog(project, modulesForDialog, projectModuleInfo != null);
 
         if (selectModuleDialog.showAndGet()) {
-            if (projectModuleInfo != null && selectModuleDialog.isApplyOnRootProject()) {
+            if (projectModuleInfo != null && selectModuleDialog.getApplyOnRootProjectCheckbox()) {
                 new ReformatProcessor(project, projectModuleInfo).run();
             } else {
                 selectModuleDialog
                         .getSelectedModules()
                         .forEach(module -> new ReformatProcessor(project, availableModules.get(module)).run());
             }
+
+            selectModuleDialog.saveModuleSettings();
         }
     }
 
@@ -73,7 +76,7 @@ public class ReformatAllFilesAction extends AnAction {
         Module[] modules = ProjectUtil.getModules(project);
         String projectBasePath = project.getBasePath();
 
-        Map<String, ModuleInfo> availableModules = new LinkedHashMap<>();
+        Map<String, ModuleInfo> availableModules = new HashMap<>();
 
         for (Module module : modules) {
             BuildTool buildTool = BuildTool.resolveBuildTool(module);

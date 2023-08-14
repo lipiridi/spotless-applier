@@ -16,6 +16,8 @@ either for the current file you're working on or for the entire project.
 | <kbd>Code</kbd> > <kbd>Reformat File With Spotless</kbd>      | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>;</kbd>                  | <kbd>⌘Сmd</kbd>+<kbd>⌥Opt</kbd>+<kbd>;</kbd>                   |
 | <kbd>Code</kbd> > <kbd>Reformat All Files With Spotless</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>;</kbd> | <kbd>⌘Сmd</kbd>+<kbd>⌥Opt</kbd>+<kbd>⇧Shift</kbd>+<kbd>;</kbd> |
 
+> ✔️ **Supports multi-module projects**
+
 ### Settings
 
 To access plugin settings, go to: `Settings` > `Tools` > `Spotless Applier`

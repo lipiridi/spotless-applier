@@ -7,33 +7,31 @@ import javax.swing.*;
 public class SpotlessApplierSettingsComponent {
 
     private final JPanel myMainPanel;
-    private final JCheckBox isAllowGradleCacheCheckBox = new JBCheckBox("Allow Gradle cache for 'apply' task");
-    private final JCheckBox isOptimizeImportsBeforeApplyingCheckBox =
-            new JBCheckBox("Optimize imports before applying");
-    private final JCheckBox isProhibitImportsWithAsteriskCheckBox =
-            new JBCheckBox("Prohibit imports with asterisk '*'");
+    private final JCheckBox allowGradleCacheCheckBox = new JBCheckBox("Allow Gradle cache for 'apply' task");
+    private final JCheckBox optimizeImportsBeforeApplyingCheckBox = new JBCheckBox("Optimize imports before applying");
+    private final JCheckBox prohibitImportsWithAsteriskCheckBox = new JBCheckBox("Prohibit imports with asterisk '*'");
 
     public SpotlessApplierSettingsComponent() {
         // Add a listener to the first checkbox to toggle the visibility of the second checkbox
-        isOptimizeImportsBeforeApplyingCheckBox.addActionListener(e -> {
-            boolean selected = isOptimizeImportsBeforeApplyingCheckBox.isSelected();
-            isProhibitImportsWithAsteriskCheckBox.setEnabled(selected);
+        optimizeImportsBeforeApplyingCheckBox.addActionListener(e -> {
+            boolean selected = optimizeImportsBeforeApplyingCheckBox.isSelected();
+            prohibitImportsWithAsteriskCheckBox.setEnabled(selected);
             if (!selected) {
-                isProhibitImportsWithAsteriskCheckBox.setSelected(false);
+                prohibitImportsWithAsteriskCheckBox.setSelected(false);
             }
         });
 
         JPanel secondRow = FormBuilder.createFormBuilder()
                 .setFormLeftIndent(20)
-                .addComponent(isProhibitImportsWithAsteriskCheckBox)
+                .addComponent(prohibitImportsWithAsteriskCheckBox)
                 .getPanel();
 
-        isAllowGradleCacheCheckBox.setToolTipText(
+        allowGradleCacheCheckBox.setToolTipText(
                 "Starting from version 6.0.0, Spotless supports Gradle's configuration cache. If you want to use it, please enable this checkbox.");
 
         myMainPanel = FormBuilder.createFormBuilder()
-                .addComponent(isAllowGradleCacheCheckBox)
-                .addComponent(isOptimizeImportsBeforeApplyingCheckBox)
+                .addComponent(allowGradleCacheCheckBox)
+                .addComponent(optimizeImportsBeforeApplyingCheckBox)
                 .addComponent(secondRow)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
@@ -44,28 +42,28 @@ public class SpotlessApplierSettingsComponent {
     }
 
     public boolean isAllowGradleCache() {
-        return isAllowGradleCacheCheckBox.isSelected();
+        return allowGradleCacheCheckBox.isSelected();
     }
 
     public void setAllowGradleCache(boolean value) {
-        isAllowGradleCacheCheckBox.setSelected(value);
+        allowGradleCacheCheckBox.setSelected(value);
     }
 
     public boolean isOptimizeImportsBeforeApplying() {
-        return isOptimizeImportsBeforeApplyingCheckBox.isSelected();
+        return optimizeImportsBeforeApplyingCheckBox.isSelected();
     }
 
     public void setOptimizeImportsBeforeApplying(boolean value) {
-        isOptimizeImportsBeforeApplyingCheckBox.setSelected(value);
+        optimizeImportsBeforeApplyingCheckBox.setSelected(value);
         // Set the default state
-        isProhibitImportsWithAsteriskCheckBox.setEnabled(isOptimizeImportsBeforeApplyingCheckBox.isSelected());
+        prohibitImportsWithAsteriskCheckBox.setEnabled(optimizeImportsBeforeApplyingCheckBox.isSelected());
     }
 
     public boolean isProhibitAsteriskImports() {
-        return isProhibitImportsWithAsteriskCheckBox.isSelected();
+        return prohibitImportsWithAsteriskCheckBox.isSelected();
     }
 
     public void setProhibitAsteriskImports(boolean value) {
-        isProhibitImportsWithAsteriskCheckBox.setSelected(value);
+        prohibitImportsWithAsteriskCheckBox.setSelected(value);
     }
 }

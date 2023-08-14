@@ -1,7 +1,7 @@
 package com.github.lipiridi.spotless.applier;
 
 import com.github.lipiridi.spotless.applier.enums.BuildTool;
-import com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState;
+import com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsState;
 import com.intellij.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.execution.Executor;
 import com.intellij.execution.RunnerAndConfigurationSettings;
