@@ -22,10 +22,10 @@
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="Spotless Applier"/>
         <applicationService
-                serviceImplementation="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsState"/>
+                serviceImplementation="com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsState"/>
         <applicationConfigurable parentId="tools"
-                                 id="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
-                                 instance="com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsConfigurable"
+                                 id="com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsConfigurable"
+                                 instance="com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsConfigurable"
                                  displayName="Spotless Applier"/>
     </extensions>
 
@@ -37,10 +37,10 @@
             <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>
             <keyboard-shortcut first-keystroke="control alt SEMICOLON" keymap="$default"/>
         </action>
-        <action id="com.github.lipiridi.spotless.applier.action.ReformatAllFilesAction"
-                class="com.github.lipiridi.spotless.applier.action.ReformatAllFilesAction"
-                text="Reformat All Files With Spotless"
-                description="Reformat all files with Spotless">
+        <action id="com.github.lipiridi.spotless.applier.action.ReformatProjectAction"
+                class="com.github.lipiridi.spotless.applier.action.ReformatProjectAction"
+                text="Reformat Project With Spotless"
+                description="Reformat project with Spotless">
             <add-to-group group-id="CodeFormatGroup" relative-to-action="ReformatCode" anchor="before"/>
             <!--<add-to-group group-id="ProjectViewPopupMenuModifyGroup" relative-to-action="ReformatCode" anchor="before"/>-->
             <keyboard-shortcut first-keystroke="control alt shift SEMICOLON" keymap="$default"/>

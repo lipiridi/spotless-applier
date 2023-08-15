@@ -1,4 +1,4 @@
-package com.github.lipiridi.spotless.applier.ui;
+package com.github.lipiridi.spotless.applier.ui.settings;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -7,14 +7,14 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Service
 @State(
-        name = "com.github.lipiridi.spotless.applier.ui.SpotlessSettingsState",
+        name = "com.github.lipiridi.spotless.applier.ui.settings.SpotlessSettingsState",
         storages = {@Storage("spotless-applier.xml")})
 public final class SpotlessApplierSettingsState implements PersistentStateComponent<SpotlessApplierSettingsState> {
 
+    public boolean allowGradleCache;
     public boolean optimizeImportsBeforeApplying;
     public boolean prohibitImportsWithAsterisk;
 
@@ -22,7 +22,7 @@ public final class SpotlessApplierSettingsState implements PersistentStateCompon
         return ApplicationManager.getApplication().getService(SpotlessApplierSettingsState.class);
     }
 
-    @Nullable @Override
+    @Override
     public SpotlessApplierSettingsState getState() {
         return this;
     }
