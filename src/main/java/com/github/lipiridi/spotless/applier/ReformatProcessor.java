@@ -117,7 +117,7 @@ public class ReformatProcessor {
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
         if (reformatSpecificFile) {
             scriptParameters = String.format(
-                    "-PspotlessIdeHook=\"%s\"%s", psiFile.getVirtualFile().getPath(), scriptParameters);
+                    "-PspotlessIdeHook=\"%s\" %s", psiFile.getVirtualFile().getPath(), scriptParameters);
         }
 
         externalSettings.setScriptParameters(scriptParameters);

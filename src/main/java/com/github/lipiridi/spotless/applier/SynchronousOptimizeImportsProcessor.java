@@ -85,6 +85,7 @@ public class SynchronousOptimizeImportsProcessor extends OptimizeImportsProcesso
         runWithoutProgress();
     }
 
+    @SuppressWarnings("DialogTitleCapitalization")
     private void runProcessFiles() {
         ProgressManager.getInstance()
                 .runProcessWithProgressSynchronously(

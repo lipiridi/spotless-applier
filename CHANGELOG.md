@@ -5,8 +5,11 @@
 ## [Unreleased]
 
 ### Added
-- Supporting for multi-module projects
+- Support for multi-module projects
 - Option that allow Gradle's configuration cache for 'apply' task
+
+### Changed
+- Rename task "Reformat All Files With Spotless" to "Reformat Project With Spotless"
 
 ## [1.0.1] - 2023-08-11
 

@@ -11,10 +11,10 @@ With this plugin, you can easily apply code formatting and style enforcement to 
 either for the current file you're working on or for the entire project.
 
 ### Features
-| Actions                                                       | Shortcuts (Windows)                                          | Shortcuts (MacOS)                                              |
-|---------------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------------|
-| <kbd>Code</kbd> > <kbd>Reformat File With Spotless</kbd>      | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>;</kbd>                  | <kbd>⌘Сmd</kbd>+<kbd>⌥Opt</kbd>+<kbd>;</kbd>                   |
-| <kbd>Code</kbd> > <kbd>Reformat All Files With Spotless</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>;</kbd> | <kbd>⌘Сmd</kbd>+<kbd>⌥Opt</kbd>+<kbd>⇧Shift</kbd>+<kbd>;</kbd> |
+| Actions                                                     | Shortcuts (Windows)                                          | Shortcuts (MacOS)                                              |
+|-------------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------------|
+| <kbd>Code</kbd> > <kbd>Reformat File With Spotless</kbd>    | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>;</kbd>                  | <kbd>⌘Сmd</kbd>+<kbd>⌥Opt</kbd>+<kbd>;</kbd>                   |
+| <kbd>Code</kbd> > <kbd>Reformat Project With Spotless</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>;</kbd> | <kbd>⌘Сmd</kbd>+<kbd>⌥Opt</kbd>+<kbd>⇧Shift</kbd>+<kbd>;</kbd> |
 
 > ✔️ **Supports multi-module projects**
 
