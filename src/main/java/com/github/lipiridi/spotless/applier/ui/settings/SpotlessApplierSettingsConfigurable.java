@@ -2,7 +2,7 @@ package com.github.lipiridi.spotless.applier.ui.settings;
 
 import com.github.lipiridi.spotless.applier.ui.SpotlessApplierSettingsComponent;
 import com.intellij.openapi.options.Configurable;
-import javax.swing.*;
+import javax.swing.JComponent;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,9 +31,9 @@ public class SpotlessApplierSettingsConfigurable implements Configurable {
         SpotlessApplierSettingsState settings = SpotlessApplierSettingsState.getInstance();
 
         return spotlessApplierSettingsComponent.isAllowGradleCache() != settings.allowGradleCache
-                ^ spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying()
+                || spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying()
                         != settings.optimizeImportsBeforeApplying
-                ^ spotlessApplierSettingsComponent.isProhibitAsteriskImports() != settings.prohibitImportsWithAsterisk;
+                || spotlessApplierSettingsComponent.isProhibitAsteriskImports() != settings.prohibitImportsWithAsterisk;
     }
 
     @Override

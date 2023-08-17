@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+### Changed
+- Fix UI settings (apply button worked incorrectly)
+
 ## [1.0.2] - 2023-08-15
 
 ### Added
