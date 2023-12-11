@@ -4,11 +4,9 @@
 
 ## [Unreleased]
 
-## [1.0.4] - 2023-12-11
-
 ### Changed
 - Update Gradle version
-- Remove untilBuild property and make plugin compatible with all future intellij version
+- Update untilBuild property and make plugin compatible with new Intellij version
 
 ## [1.0.3] - 2023-08-17
 
