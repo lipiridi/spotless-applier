@@ -7,10 +7,10 @@ fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.0"
+    id("org.jetbrains.kotlin.jvm") version "1.9.21"
     id("org.jetbrains.intellij") version "1.16.1"
-    id("org.jetbrains.changelog") version "2.1.2"
-    id("org.jetbrains.kotlinx.kover") version "0.7.3"
+    id("org.jetbrains.changelog") version "2.2.0"
+    id("org.jetbrains.kotlinx.kover") version "0.7.5"
     id("com.diffplug.spotless") version "6.23.3"
 }
 
@@ -63,7 +63,7 @@ tasks {
     patchPluginXml {
         version = properties("pluginVersion")
         sinceBuild = properties("pluginSinceBuild")
-        untilBuild = properties("pluginUntilBuild")
+        untilBuild = ""
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
