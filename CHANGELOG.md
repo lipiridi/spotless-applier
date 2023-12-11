@@ -4,9 +4,11 @@
 
 ## [Unreleased]
 
+## [1.0.4] - 2023-12-11
+
 ### Changed
 - Update Gradle version
-- Remove untilBuild property and make plugin compatible with all future intellij version
+- Update untilBuild property and make plugin compatible with new Intellij version
 
 ## [1.0.3] - 2023-08-17
 
@@ -34,7 +36,8 @@
 - The ability to apply Spotless formatting to the currently opened file in the editor or to the entire project.
 - Introduced an option to execute the default "optimize import" task before applying Spotless formatting.
 
-[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/lipiridi/spotless-applier/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/lipiridi/spotless-applier/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/lipiridi/spotless-applier/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/lipiridi/spotless-applier/compare/v1.0.0...v1.0.1
