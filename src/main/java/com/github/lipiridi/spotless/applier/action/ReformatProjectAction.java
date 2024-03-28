@@ -6,6 +6,7 @@ import com.github.lipiridi.spotless.applier.enums.BuildTool;
 import com.github.lipiridi.spotless.applier.ui.SelectModuleDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -113,6 +114,6 @@ public class ReformatProjectAction extends AnAction {
     }
 
     private void reformatModule(Project project, ModuleInfo moduleInfo) {
-        new ReformatProcessor(project, moduleInfo).run();
+        new ReformatProcessor(project, moduleInfo).run(ProgressExecutionMode.IN_BACKGROUND_ASYNC);
     }
 }
