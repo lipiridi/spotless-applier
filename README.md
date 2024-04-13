@@ -17,6 +17,11 @@ either for the current file you're working on or for the entire project.
 | <kbd>Code</kbd> > <kbd>Reformat Project With Spotless</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>;</kbd> | <kbd>⌘Сmd</kbd>+<kbd>⌥Opt</kbd>+<kbd>⇧Shift</kbd>+<kbd>;</kbd> |
 
 > ✔️ **Supports multi-module projects**
+> 
+### Commit check
+The plugin also offers a commit check to automatically apply Spotless formatting. 
+
+To enable this feature, navigate to `Settings` > `Version Control` > `Commit` and activate `Reformat code with Spotless`
 
 ### Settings
 
@@ -30,6 +35,7 @@ To access plugin settings, go to: `Settings` > `Tools` > `Spotless Applier`
 
 ![spotlessdemo](https://github.com/lipiridi/spotless-applier/assets/60580660/990e7bb9-8b75-4ca4-8973-f1fb2cf74e78)
 ![image](https://github.com/lipiridi/spotless-applier/assets/60580660/0d6ba567-e955-4193-b85b-f06e0541c790)
+![image](https://github.com/lipiridi/spotless-applier/assets/60580660/fbd26155-c7f9-4837-9e97-d48530d0ae39)
 
 
 ## Install
