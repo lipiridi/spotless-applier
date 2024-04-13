@@ -7,6 +7,9 @@
 ### Added
 - Reformat code with spotless commit checkin handler
 
+### Changed
+- Run gradle task for the entire project in sync mode
+
 ## [1.0.4] - 2023-12-11
 
 ### Changed
