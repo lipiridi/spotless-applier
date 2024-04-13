@@ -7,11 +7,11 @@ fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.21"
-    id("org.jetbrains.intellij") version "1.16.1"
+    id("org.jetbrains.kotlin.jvm") version "1.9.23"
+    id("org.jetbrains.intellij") version "1.17.3"
     id("org.jetbrains.changelog") version "2.2.0"
-    id("org.jetbrains.kotlinx.kover") version "0.7.5"
-    id("com.diffplug.spotless") version "6.23.3"
+    id("org.jetbrains.kotlinx.kover") version "0.7.6"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = properties("pluginGroup").get()
