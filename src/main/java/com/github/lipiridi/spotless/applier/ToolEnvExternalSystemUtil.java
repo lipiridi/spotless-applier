@@ -13,7 +13,6 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.gradle.util.GradleConstants;
 
 public final class ToolEnvExternalSystemUtil {
     private static final Logger LOG = Logger.getInstance(ToolEnvExternalSystemUtil.class);
@@ -53,22 +52,15 @@ public final class ToolEnvExternalSystemUtil {
 
         final String title = moduleName + " " + taskSettings.getTaskNames();
 
-        Task task = getTask(project, document, title, taskUnderProgress, externalSystemId);
+        Task task = getTask(project, document, title, taskUnderProgress);
 
         task.queue();
     }
 
     @NotNull private static Task getTask(
-            @NotNull Project project,
-            Document document,
-            String title,
-            TaskUnderProgress taskUnderProgress,
-            ProjectSystemId externalSystemId) {
-        // Currently not found the way to run gradle task synchronously
-        // https://intellij-support.jetbrains.com/hc/en-us/community/posts/12849664786322-Execute-Gradle-task-in-ProgressExecutionMode-MODAL-SYNC
-        // https://youtrack.jetbrains.com/issue/IDEA-327879
-        if (document == null && !externalSystemId.equals(GradleConstants.SYSTEM_ID)) {
-            return new Task.Modal(project, title, false) {
+            @NotNull Project project, Document document, String title, TaskUnderProgress taskUnderProgress) {
+        if (document == null) {
+            return new Task.Modal(project, title, true) {
                 @Override
                 public void run(@NotNull ProgressIndicator indicator) {
                     taskUnderProgress.execute(indicator);
@@ -78,9 +70,7 @@ public final class ToolEnvExternalSystemUtil {
             return new Task.Backgroundable(project, title) {
                 @Override
                 public void run(@NotNull ProgressIndicator indicator) {
-                    if (document != null) {
-                        document.setReadOnly(true);
-                    }
+                    document.setReadOnly(true);
                     taskUnderProgress.execute(indicator);
                 }
             };
