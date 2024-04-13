@@ -1,25 +1,22 @@
 package com.github.lipiridi.spotless.applier.trigger;
 
+import com.github.lipiridi.spotless.applier.ModuleInfo;
 import com.github.lipiridi.spotless.applier.ReformatProcessor;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vcs.CheckinProjectPanel;
 import com.intellij.openapi.vcs.changes.CommitExecutor;
 import com.intellij.openapi.vcs.checkin.CheckinHandler;
 import com.intellij.openapi.vcs.ui.RefreshableOnComponent;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.util.PairConsumer;
 import java.awt.*;
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.Objects;
 import javax.swing.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,17 +25,15 @@ public class SpotlessCheckinHandler extends CheckinHandler {
     private static final String ACTIVATED_OPTION_NAME = "SPOTLESS_PRECOMMIT_FORMATTING";
 
     private final Project project;
-    private final CheckinProjectPanel checkinPanel;
     private JCheckBox checkBox;
 
-    public SpotlessCheckinHandler(Project project, CheckinProjectPanel checkinPanel) {
+    public SpotlessCheckinHandler(Project project) {
         this.project = project;
-                                this.checkinPanel = checkinPanel;
     }
 
     @Override
     @Nullable public RefreshableOnComponent getBeforeCheckinConfigurationPanel() {
-                                                this.checkBox = new NonFocusableCheckBox("Reformat Code with Spotless");
+        this.checkBox = new NonFocusableCheckBox("Reformat code with Spotless");
         return new SpotlessRefreshableOnComponent(checkBox);
     }
 
@@ -50,21 +45,24 @@ public class SpotlessCheckinHandler extends CheckinHandler {
         }
 
         try {
-
-            Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-            if (editor != null) {
-                Document document = editor.getDocument();
-                Optional.ofNullable(PsiDocumentManager.getInstance(project).getPsiFile(document))
-                        .ifPresent(psiFile -> new ReformatProcessor(project, document, psiFile)
-                                .run(ProgressExecutionMode.MODAL_SYNC));
-                // make sure files are physical saved before commit
-                FileDocumentManager.getInstance().saveAllDocuments();
-            }
+            new ReformatProcessor(project, findRootModule()).run();
             return ReturnResult.COMMIT;
         } catch (Exception e) {
             handleError(e);
             return ReturnResult.CANCEL;
         }
+    }
+
+    private ModuleInfo findRootModule() {
+        Module[] modules = ProjectUtil.getModules(project);
+        String projectBasePath = project.getBasePath();
+
+        return Arrays.stream(modules)
+                .map(module -> ModuleInfo.create(project, projectBasePath, module))
+                .filter(Objects::nonNull)
+                .filter(ModuleInfo::rootModule)
+                .findFirst()
+                .orElse(null);
     }
 
     private void handleError(Exception e) {
@@ -89,9 +87,6 @@ public class SpotlessCheckinHandler extends CheckinHandler {
             panel.add(checkBox);
             return panel;
         }
-
-        @Override
-        public void refresh() {}
 
         @Override
         public void saveState() {

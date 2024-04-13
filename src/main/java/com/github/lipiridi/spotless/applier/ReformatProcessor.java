@@ -15,8 +15,6 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
-import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
-import com.intellij.openapi.externalSystem.util.ExternalSystemUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -32,6 +30,7 @@ import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
 import org.jetbrains.idea.maven.execution.MavenRunner;
 import org.jetbrains.idea.maven.execution.MavenRunnerParameters;
 import org.jetbrains.idea.maven.execution.MavenRunnerSettings;
+import org.jetbrains.idea.maven.utils.MavenUtil;
 import org.jetbrains.plugins.gradle.settings.GradleProjectSettings;
 import org.jetbrains.plugins.gradle.settings.GradleSettings;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
@@ -76,7 +75,7 @@ public class ReformatProcessor {
         }
     }
 
-    public void run(ProgressExecutionMode mode) {
+    public void run() {
         if (buildTool == null) {
             NOTIFICATION_GROUP
                     .createNotification("Unable to resolve build tool", NotificationType.ERROR)
@@ -91,27 +90,22 @@ public class ReformatProcessor {
         optimizeImports();
 
         switch (Objects.requireNonNull(buildTool)) {
-            case GRADLE -> executeGradleTask(mode);
-            case MAVEN -> executeMavenTask(mode);
+            case GRADLE -> executeGradleTask();
+            case MAVEN -> executeMavenTask();
         }
     }
 
-    private void executeGradleTask(ProgressExecutionMode mode) {
+    private void executeGradleTask() {
         ExternalSystemTaskExecutionSettings externalSettings = getGradleSystemTaskExecutionSettings();
 
-        // don't allow modification of the document while the task is running
-        if (document != null) {
-            document.setReadOnly(false);
-        }
-
-        ExternalSystemUtil.runTask(
+        ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
                 DefaultRunExecutor.EXECUTOR_ID,
                 project,
+                getModuleName(),
                 GradleConstants.SYSTEM_ID,
                 reformatTaskCallback,
-                mode,
-                false);
+                document);
     }
 
     private ExternalSystemTaskExecutionSettings getGradleSystemTaskExecutionSettings() {
@@ -150,7 +144,7 @@ public class ReformatProcessor {
                 .isOrGreaterThan(NO_CONFIG_CACHE_MIN_GRADLE_VERSION.major, NO_CONFIG_CACHE_MIN_GRADLE_VERSION.minor);
     }
 
-    private void executeMavenTask(ProgressExecutionMode mode) {
+    private void executeMavenTask() {
         List<String> commands = Collections.singletonList("spotless:apply");
 
         ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
@@ -158,14 +152,15 @@ public class ReformatProcessor {
 
         ExecutionEnvironment environment = getMavenExecutionEnvironment(commands);
 
-        ExternalSystemUtil.runTask(
+        ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
                 DefaultRunExecutor.EXECUTOR_ID,
                 project,
-                GradleConstants.SYSTEM_ID,
+                getModuleName(),
+                MavenUtil.SYSTEM_ID,
                 reformatTaskCallback,
-                mode,
-                false);
+                document,
+                environment);
     }
 
     @NotNull private ExecutionEnvironment getMavenExecutionEnvironment(List<String> commands) {

@@ -2,18 +2,12 @@ package com.github.lipiridi.spotless.applier.action;
 
 import com.github.lipiridi.spotless.applier.ModuleInfo;
 import com.github.lipiridi.spotless.applier.ReformatProcessor;
-import com.github.lipiridi.spotless.applier.enums.BuildTool;
 import com.github.lipiridi.spotless.applier.ui.SelectModuleDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -77,7 +71,7 @@ public class ReformatProjectAction extends AnAction {
         String projectBasePath = project.getBasePath();
 
         return Arrays.stream(modules)
-                .map(module -> buildModuleInfo(project, projectBasePath, module))
+                .map(module -> ModuleInfo.create(project, projectBasePath, module))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toMap(
                         moduleInfo -> moduleInfo.module().getName(),
@@ -85,35 +79,7 @@ public class ReformatProjectAction extends AnAction {
                         (existing, replacement) -> existing));
     }
 
-    @SuppressWarnings("DataFlowIssue")
-    private ModuleInfo buildModuleInfo(Project project, String projectBasePath, Module module) {
-        BuildTool buildTool = BuildTool.resolveBuildTool(module);
-        if (buildTool == null) {
-            return null;
-        }
-
-        String modulePath = buildTool.getModulePath(module);
-        if (modulePath == null) {
-            return null;
-        }
-
-        boolean isRootModule = modulePath.equals(projectBasePath);
-
-        Module rootModule =
-                switch (buildTool) {
-                    case MAVEN -> module;
-                    case GRADLE -> {
-                        // Gradle defines main and test folders also as modules,
-                        // but we want to find only root module
-                        VirtualFile moduleVirtualFile = VfsUtil.findFile(Path.of(modulePath), true);
-                        yield ModuleUtil.findModuleForFile(moduleVirtualFile, project);
-                    }
-                };
-
-        return new ModuleInfo(rootModule, modulePath, buildTool, isRootModule);
-    }
-
     private void reformatModule(Project project, ModuleInfo moduleInfo) {
-        new ReformatProcessor(project, moduleInfo).run(ProgressExecutionMode.IN_BACKGROUND_ASYNC);
+        new ReformatProcessor(project, moduleInfo).run();
     }
 }

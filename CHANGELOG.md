@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+### Added
+- Reformat code with spotless commit checkin handler
+
 ## [1.0.4] - 2023-12-11
 
 ### Changed

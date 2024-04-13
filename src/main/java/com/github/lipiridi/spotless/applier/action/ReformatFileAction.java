@@ -6,7 +6,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
 import com.intellij.openapi.project.Project;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +23,7 @@ public class ReformatFileAction extends AnAction {
                 .map(Editor::getDocument)
                 .ifPresent(
                         document -> Optional.ofNullable(event.getDataContext().getData(CommonDataKeys.PSI_FILE))
-                                .ifPresent(psiFile -> new ReformatProcessor(project, document, psiFile)
-                                        .run(ProgressExecutionMode.IN_BACKGROUND_ASYNC)));
+                                .ifPresent(psiFile -> new ReformatProcessor(project, document, psiFile).run()));
     }
 
     @Override

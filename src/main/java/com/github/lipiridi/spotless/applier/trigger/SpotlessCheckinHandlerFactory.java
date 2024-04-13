@@ -11,6 +11,6 @@ public class SpotlessCheckinHandlerFactory extends CheckinHandlerFactory {
     @NotNull @Override
     public CheckinHandler createHandler(@NotNull CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
         var project = panel.getProject();
-        return new SpotlessCheckinHandler(project, panel);
+        return new SpotlessCheckinHandler(project);
     }
 }
