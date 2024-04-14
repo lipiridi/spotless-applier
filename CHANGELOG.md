@@ -9,6 +9,7 @@
 
 ### Changed
 - Run gradle task for the entire project in sync mode
+- Increase Idea compatibility version (sinceBuild) to 241
 
 ## [1.0.4] - 2023-12-11
 
