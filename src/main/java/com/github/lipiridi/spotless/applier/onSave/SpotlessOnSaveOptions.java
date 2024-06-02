@@ -7,11 +7,14 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 @Service(Service.Level.PROJECT)
-@State(name = "SpotlessOnSaveOptions")
+@State(
+        name = "SpotlessOnSaveOptions",
+        storages = {@Storage("spotless-applier.xml")})
 public final class SpotlessOnSaveOptions extends SpotlessOnSaveOptionsBase<SpotlessOnSaveOptions.State>
         implements PersistentStateComponent<SpotlessOnSaveOptions.State>, Cloneable {
 

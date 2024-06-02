@@ -19,9 +19,15 @@ either for the current file you're working on or for the entire project.
 > ✔️ **Supports multi-module projects**
 > 
 ### Commit check
-The plugin also offers a commit check to automatically apply Spotless formatting. 
+The plugin offers a commit check to automatically apply Spotless formatting. 
 
 To enable this feature, navigate to `Settings` > `Version Control` > `Commit` and activate `Reformat code with Spotless`
+
+### Action on save
+The plugin offers an action to automatically apply Spotless formatting on save.
+There is an option to choose the file extensions for which it will be triggered.
+
+To enable this feature, navigate to `Settings` > `Tools` > `Actions on Save` and activate `Run spotless`
 
 ### Settings
 
@@ -35,8 +41,8 @@ To access plugin settings, go to: `Settings` > `Tools` > `Spotless Applier`
 
 ![spotlessdemo](https://github.com/lipiridi/spotless-applier/assets/60580660/990e7bb9-8b75-4ca4-8973-f1fb2cf74e78)
 ![image](https://github.com/lipiridi/spotless-applier/assets/60580660/0d6ba567-e955-4193-b85b-f06e0541c790)
+![image](https://github.com/lipiridi/spotless-applier/assets/60580660/f6980124-c3e1-45fe-a7be-51dd4f108e81)
 ![image](https://github.com/lipiridi/spotless-applier/assets/60580660/fbd26155-c7f9-4837-9e97-d48530d0ae39)
-
 
 ## Install
 
@@ -61,6 +67,8 @@ For applying changes only for current file it uses:
 ## Acknowledgments
 Thanks to [Ryan Gurney](https://github.com/ragurney) for his [Spotless IntelliJ Gradle](https://github.com/ragurney/spotless-intellij-gradle) plugin
 which I used as the basis for this plugin.
+
+Thanks to [Ertugrul Sener](https://github.com/ErtugrulSener) for implementing the "Action on Save" feature - [PR #17](https://github.com/lipiridi/spotless-applier/pull/17).
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md)
