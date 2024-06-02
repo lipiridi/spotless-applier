@@ -68,6 +68,8 @@ For applying changes only for current file it uses:
 Thanks to [Ryan Gurney](https://github.com/ragurney) for his [Spotless IntelliJ Gradle](https://github.com/ragurney/spotless-intellij-gradle) plugin
 which I used as the basis for this plugin.
 
+Thanks to [Luís Alves](https://github.com/luisalves00) for implementing the "Pre-commit check" feature - [PR #13](https://github.com/lipiridi/spotless-applier/pull/13).
+
 Thanks to [Ertugrul Sener](https://github.com/ErtugrulSener) for implementing the "Action on Save" feature - [PR #17](https://github.com/lipiridi/spotless-applier/pull/17).
 
 ## Contributing
