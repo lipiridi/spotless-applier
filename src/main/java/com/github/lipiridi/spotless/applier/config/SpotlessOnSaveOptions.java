@@ -39,7 +39,7 @@ public final class SpotlessOnSaveOptions
 
   @Override
   protected void convertOldProperties() {
-    String oldFormatOnSaveProperty = "format.on.save";
+    String oldFormatOnSaveProperty = "spotless.format.on.save";
     boolean formatAllOld =
         PropertiesComponent.getInstance(myProject).getBoolean(oldFormatOnSaveProperty);
     if (formatAllOld) {
