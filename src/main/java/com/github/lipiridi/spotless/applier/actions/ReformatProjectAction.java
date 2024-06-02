@@ -1,4 +1,4 @@
-package com.github.lipiridi.spotless.applier.action;
+package com.github.lipiridi.spotless.applier.actions;
 
 import com.github.lipiridi.spotless.applier.ModuleInfo;
 import com.github.lipiridi.spotless.applier.ReformatProcessor;
