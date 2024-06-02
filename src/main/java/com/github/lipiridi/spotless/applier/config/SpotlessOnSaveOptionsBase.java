@@ -16,7 +16,7 @@ public class SpotlessOnSaveOptionsBase<S extends SpotlessOnSaveOptionsBase.State
         implements PersistentStateComponent<S>, Cloneable {
 
     protected static final ExtensionPointName<DefaultsProvider> EP_NAME =
-            ExtensionPointName.create("com.intellij.formatOnSaveOptions.defaultsProvider");
+            ExtensionPointName.create("com.github.lipiridi.spotless-applier.formatOnSaveOptions.spotlessProvider");
 
     /**
      * By default, the 'Reformat code' and 'Optimize imports' check boxes are unchecked on the

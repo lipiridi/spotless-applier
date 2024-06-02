@@ -4,12 +4,13 @@
 package com.github.lipiridi.spotless.applier.config;
 
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.components.*;
-import com.intellij.openapi.components.Service.Level;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.Service;
+import com.intellij.openapi.components.State;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
-@Service(Level.APP)
+@Service(Service.Level.PROJECT)
 @State(name = "SpotlessOnSaveOptions")
 public final class SpotlessOnSaveOptions extends SpotlessOnSaveOptionsBase<SpotlessOnSaveOptions.State>
         implements PersistentStateComponent<SpotlessOnSaveOptions.State>, Cloneable {
