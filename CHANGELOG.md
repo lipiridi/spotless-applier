@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2024-06-02
+
 ### Added
 
 - 'Run spotless' action on save
