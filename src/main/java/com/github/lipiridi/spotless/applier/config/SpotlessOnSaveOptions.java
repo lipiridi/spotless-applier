@@ -11,46 +11,44 @@ import org.jetbrains.annotations.NotNull;
 
 @Service(Level.APP)
 @State(name = "SpotlessOnSaveOptions")
-public final class SpotlessOnSaveOptions
-    extends SpotlessOnSaveOptionsBase<SpotlessOnSaveOptions.State>
-    implements PersistentStateComponent<SpotlessOnSaveOptions.State>, Cloneable {
+public final class SpotlessOnSaveOptions extends SpotlessOnSaveOptionsBase<SpotlessOnSaveOptions.State>
+        implements PersistentStateComponent<SpotlessOnSaveOptions.State>, Cloneable {
 
-  public static @NotNull SpotlessOnSaveOptions getInstance(@NotNull Project project) {
-    return project.getService(SpotlessOnSaveOptions.class);
-  }
+    public static @NotNull SpotlessOnSaveOptions getInstance(@NotNull Project project) {
+        return project.getService(SpotlessOnSaveOptions.class);
+    }
 
-  static final class State extends SpotlessOnSaveOptionsBase.StateBase implements Cloneable {
-    State() {
-      super(DefaultsProvider::getFileTypesFormattedOnSaveByDefault);
+    static final class State extends SpotlessOnSaveOptionsBase.StateBase implements Cloneable {
+        State() {
+            super(DefaultsProvider::getFileTypesFormattedOnSaveByDefault);
+        }
+
+        @Override
+        public State clone() {
+            return (State) super.clone();
+        }
+    }
+
+    private final @NotNull Project myProject;
+
+    public SpotlessOnSaveOptions(@NotNull Project project) {
+        super(new State());
+        myProject = project;
     }
 
     @Override
-    public State clone() {
-      return (State) super.clone();
+    protected void convertOldProperties() {
+        String oldFormatOnSaveProperty = "spotless.format.on.save";
+        boolean formatAllOld = PropertiesComponent.getInstance(myProject).getBoolean(oldFormatOnSaveProperty);
+        if (formatAllOld) {
+            setRunOnSaveEnabled(true);
+            setRunForAllFileTypes();
+        }
+        PropertiesComponent.getInstance(myProject).unsetValue(oldFormatOnSaveProperty);
     }
-  }
 
-  private final @NotNull Project myProject;
-
-  public SpotlessOnSaveOptions(@NotNull Project project) {
-    super(new State());
-    myProject = project;
-  }
-
-  @Override
-  protected void convertOldProperties() {
-    String oldFormatOnSaveProperty = "spotless.format.on.save";
-    boolean formatAllOld =
-        PropertiesComponent.getInstance(myProject).getBoolean(oldFormatOnSaveProperty);
-    if (formatAllOld) {
-      setRunOnSaveEnabled(true);
-      setRunForAllFileTypes();
+    @Override
+    public SpotlessOnSaveOptions clone() {
+        return (SpotlessOnSaveOptions) super.clone();
     }
-    PropertiesComponent.getInstance(myProject).unsetValue(oldFormatOnSaveProperty);
-  }
-
-  @Override
-  public SpotlessOnSaveOptions clone() {
-    return (SpotlessOnSaveOptions) super.clone();
-  }
 }

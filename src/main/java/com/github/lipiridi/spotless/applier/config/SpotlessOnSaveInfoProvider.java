@@ -8,9 +8,9 @@ import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
 public class SpotlessOnSaveInfoProvider extends ActionOnSaveInfoProvider {
-  @Override
-  protected @NotNull Collection<? extends ActionOnSaveInfo> getActionOnSaveInfos(
-      @NotNull ActionOnSaveContext context) {
-    return Collections.singleton(new SpotlessOnSaveActionInfo(context));
-  }
+    @Override
+    protected @NotNull Collection<? extends ActionOnSaveInfo> getActionOnSaveInfos(
+            @NotNull ActionOnSaveContext context) {
+        return Collections.singleton(new SpotlessOnSaveActionInfo(context));
+    }
 }
