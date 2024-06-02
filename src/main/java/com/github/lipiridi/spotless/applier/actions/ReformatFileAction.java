@@ -1,4 +1,4 @@
-package com.github.lipiridi.spotless.applier.action;
+package com.github.lipiridi.spotless.applier.actions;
 
 import com.github.lipiridi.spotless.applier.ReformatProcessor;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
