@@ -1,6 +1,5 @@
 package com.github.lipiridi.spotless.applier.actions;
 
-import com.github.lipiridi.spotless.applier.config.SpotlessConfiguration;
 import com.github.lipiridi.spotless.applier.config.SpotlessOnSaveOptions;
 import com.intellij.ide.actionsOnSave.impl.ActionsOnSaveFileDocumentManagerListener;
 import com.intellij.openapi.editor.Document;
@@ -39,7 +38,7 @@ public class ReformatActionOnSave extends ActionsOnSaveFileDocumentManagerListen
 
   @Override
   public boolean isEnabledForProject(@NotNull Project project) {
-    return SpotlessConfiguration.getInstance(project).isRunOnSaveEnabled();
+    return SpotlessOnSaveOptions.getInstance(project).isRunOnSaveEnabled();
   }
 
   @Override
