@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("UnstableApiUsage")
 public class SpotlessOnSaveInfoProvider extends ActionOnSaveInfoProvider {
   @Override
   protected @NotNull Collection<? extends ActionOnSaveInfo> getActionOnSaveInfos(

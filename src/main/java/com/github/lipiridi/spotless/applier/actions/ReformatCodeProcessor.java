@@ -12,6 +12,8 @@ import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExe
 import com.intellij.openapi.externalSystem.service.execution.ProgressExecutionMode;
 import com.intellij.openapi.externalSystem.util.ExternalSystemUtil;
 import com.intellij.openapi.util.NlsContexts;
+import com.intellij.openapi.util.NlsContexts.Command;
+import com.intellij.openapi.util.NlsContexts.ProgressText;
 import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
@@ -191,13 +193,11 @@ public class ReformatCodeProcessor extends AbstractLayoutCodeProcessor {
     }
   }
 
-  @SuppressWarnings("UnstableApiUsage")
-  private static @NlsContexts.ProgressText String getProgressText() {
+  private static @ProgressText String getProgressText() {
     return CodeStyleBundle.message("reformat.progress.common.text");
   }
 
-  @SuppressWarnings("UnstableApiUsage")
-  public static @NlsContexts.Command String getCommandName() {
+  public static @Command String getCommandName() {
     return CodeStyleBundle.message("process.reformat.code");
   }
 }
