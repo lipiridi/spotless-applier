@@ -54,7 +54,7 @@
                                   implementation="com.github.lipiridi.spotless.applier.config.SpotlessOnSaveInfoProvider"
                                   order="after FormatOnSaveInfoProvider, before BuildOnSaveInfoProvider, before FileWatcherOnSaveInfoProvider, before UploadOnSaveInfoProvider"/>
         <actionOnSave id="SpotlessActionOnSave"
-                      implementation="com.github.lipiridi.spotless.applier.actions.SpotlessActionOnSave"
+                      implementation="com.github.lipiridi.spotless.applier.actions.ReformatActionOnSave"
                       order="after FormatOnSaveAction"/>
     </extensions>
 </idea-plugin>

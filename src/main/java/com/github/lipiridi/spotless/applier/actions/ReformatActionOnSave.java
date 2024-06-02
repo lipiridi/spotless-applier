@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** Action to be called whenever a document is saved */
-public class SpotlessActionOnSave extends ActionsOnSaveFileDocumentManagerListener.ActionOnSave {
+public class ReformatActionOnSave extends ActionsOnSaveFileDocumentManagerListener.ActionOnSave {
   public static boolean isActiveFile(
       @NotNull PsiFile psiFile, @NotNull Project project) {
     var virtualFile = psiFile.getVirtualFile();
