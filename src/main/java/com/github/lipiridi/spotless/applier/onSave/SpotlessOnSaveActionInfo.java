@@ -1,6 +1,6 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the
 // Apache 2.0 license.
-package com.github.lipiridi.spotless.applier.config;
+package com.github.lipiridi.spotless.applier.onSave;
 
 import com.intellij.ide.actionsOnSave.ActionOnSaveContext;
 import com.intellij.lang.Language;

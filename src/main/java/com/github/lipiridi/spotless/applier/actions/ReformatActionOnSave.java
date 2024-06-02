@@ -1,7 +1,7 @@
 package com.github.lipiridi.spotless.applier.actions;
 
 import com.github.lipiridi.spotless.applier.ReformatProcessor;
-import com.github.lipiridi.spotless.applier.config.SpotlessOnSaveOptions;
+import com.github.lipiridi.spotless.applier.onSave.SpotlessOnSaveOptions;
 import com.intellij.ide.actionsOnSave.impl.ActionsOnSaveFileDocumentManagerListener;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;

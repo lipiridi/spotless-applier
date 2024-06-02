@@ -1,4 +1,4 @@
-package com.github.lipiridi.spotless.applier.config;
+package com.github.lipiridi.spotless.applier.onSave;
 
 import com.intellij.ide.actionsOnSave.ActionOnSaveContext;
 import com.intellij.ide.actionsOnSave.ActionOnSaveInfo;
