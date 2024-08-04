@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Fix commit checkin handler for multi-module projects
+
 ## [1.1.0] - 2024-06-02
 
 ### Added

@@ -8,18 +8,25 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vcs.changes.ChangesUtil;
 import com.intellij.openapi.vcs.changes.CommitExecutor;
 import com.intellij.openapi.vcs.changes.ui.BooleanCommitOption;
 import com.intellij.openapi.vcs.checkin.CheckinHandler;
+import com.intellij.openapi.vcs.checkin.CommitCheck;
+import com.intellij.openapi.vcs.checkin.CommitInfo;
+import com.intellij.openapi.vcs.checkin.CommitProblem;
 import com.intellij.openapi.vcs.ui.RefreshableOnComponent;
 import com.intellij.util.PairConsumer;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Objects;
 import javax.swing.*;
+import kotlin.coroutines.Continuation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SpotlessCheckinHandler extends CheckinHandler {
+@SuppressWarnings("UnstableApiUsage")
+public class SpotlessCheckinHandler extends CheckinHandler implements CommitCheck {
     private static final Logger LOGGER = Logger.getInstance(SpotlessCheckinHandler.class);
     private final SpotlessApplierSettingsState spotlessSettings = SpotlessApplierSettingsState.getInstance();
     private final Project project;
@@ -74,5 +81,22 @@ public class SpotlessCheckinHandler extends CheckinHandler {
         }
         LOGGER.info(msg, e);
         Messages.showErrorDialog(project, msg, "Error Reformatting Code with Spotless");
+    }
+
+    @NotNull @Override
+    public ExecutionOrder getExecutionOrder() {
+        return CommitCheck.ExecutionOrder.MODIFICATION;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return spotlessSettings.preCommitSpotlessFormating;
+    }
+
+    @Nullable @Override
+    public Object runCheck(@NotNull CommitInfo commitInfo, @NotNull Continuation<? super CommitProblem> continuation) {
+        var affectedFiles =
+                ChangesUtil.iterateFiles(commitInfo.getCommittedChanges()).toList();
+        return null;
     }
 }
