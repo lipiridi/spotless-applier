@@ -68,10 +68,9 @@ public class ReformatProjectAction extends AnAction {
 
     private Map<String, ModuleInfo> findAvailableModules(Project project) {
         Module[] modules = ProjectUtil.getModules(project);
-        String projectBasePath = project.getBasePath();
 
         return Arrays.stream(modules)
-                .map(module -> ModuleInfo.create(project, projectBasePath, module))
+                .map(module -> ModuleInfo.create(project, module))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toMap(
                         moduleInfo -> moduleInfo.module().getName(),

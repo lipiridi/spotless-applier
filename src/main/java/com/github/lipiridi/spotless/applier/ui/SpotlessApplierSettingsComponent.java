@@ -7,7 +7,7 @@ import javax.swing.*;
 public class SpotlessApplierSettingsComponent {
 
     private final JPanel myMainPanel;
-    private final JCheckBox allowGradleCacheCheckBox = new JBCheckBox("Allow Gradle cache for 'apply' task");
+    private final JCheckBox prohibitGradleCacheCheckBox = new JBCheckBox("Prohibit Gradle cache for 'apply' task");
     private final JCheckBox optimizeImportsBeforeApplyingCheckBox = new JBCheckBox("Optimize imports before applying");
     private final JCheckBox prohibitImportsWithAsteriskCheckBox = new JBCheckBox("Prohibit imports with asterisk '*'");
 
@@ -26,11 +26,11 @@ public class SpotlessApplierSettingsComponent {
                 .addComponent(prohibitImportsWithAsteriskCheckBox)
                 .getPanel();
 
-        allowGradleCacheCheckBox.setToolTipText(
+        prohibitGradleCacheCheckBox.setToolTipText(
                 "Starting from version 6.0.0, Spotless supports Gradle's configuration cache. If you want to use it, please enable this checkbox.");
 
         myMainPanel = FormBuilder.createFormBuilder()
-                .addComponent(allowGradleCacheCheckBox)
+                .addComponent(prohibitGradleCacheCheckBox)
                 .addComponent(optimizeImportsBeforeApplyingCheckBox)
                 .addComponent(secondRow)
                 .addComponentFillVertically(new JPanel(), 0)
@@ -41,12 +41,12 @@ public class SpotlessApplierSettingsComponent {
         return myMainPanel;
     }
 
-    public boolean isAllowGradleCache() {
-        return allowGradleCacheCheckBox.isSelected();
+    public boolean isProhibitGradleCache() {
+        return prohibitGradleCacheCheckBox.isSelected();
     }
 
-    public void setAllowGradleCache(boolean value) {
-        allowGradleCacheCheckBox.setSelected(value);
+    public void setProhibitGradleCache(boolean value) {
+        prohibitGradleCacheCheckBox.setSelected(value);
     }
 
     public boolean isOptimizeImportsBeforeApplying() {

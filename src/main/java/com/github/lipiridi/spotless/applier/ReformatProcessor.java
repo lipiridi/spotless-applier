@@ -126,7 +126,7 @@ public class ReformatProcessor {
     }
 
     private boolean shouldAddNoConfigCacheOption() {
-        if (spotlessSettings.allowGradleCache) {
+        if (!spotlessSettings.prohibitGradleCache) {
             return false;
         }
 
