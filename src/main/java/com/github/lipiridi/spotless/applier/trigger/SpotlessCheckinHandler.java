@@ -28,11 +28,9 @@ public class SpotlessCheckinHandler extends CheckinHandler {
     private static final Logger LOGGER = Logger.getInstance(SpotlessCheckinHandler.class);
     private final SpotlessApplierSettingsState spotlessSettings = SpotlessApplierSettingsState.getInstance();
     private final Project project;
-    private final ChangeListManager changeListManager;
 
     public SpotlessCheckinHandler(Project project) {
         this.project = project;
-        changeListManager = ChangeListManager.getInstance(project);
     }
 
     @Override
@@ -74,6 +72,7 @@ public class SpotlessCheckinHandler extends CheckinHandler {
     }
 
     public Set<ModuleInfo> findAffectedModules() {
+        ChangeListManager changeListManager = ChangeListManager.getInstance(project);
         List<VirtualFile> affectedFiles = changeListManager.getAllChanges().stream()
                 .filter(change -> change.getType() != Change.Type.DELETED)
                 .map(Change::getVirtualFile)
