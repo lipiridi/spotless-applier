@@ -40,7 +40,7 @@ To access plugin settings, go to: `Settings` > `Tools` > `Spotless Applier`
 ### Media
 
 ![spotlessdemo](https://github.com/lipiridi/spotless-applier/assets/60580660/990e7bb9-8b75-4ca4-8973-f1fb2cf74e78)
-![image](https://github.com/lipiridi/spotless-applier/assets/60580660/0d6ba567-e955-4193-b85b-f06e0541c790)
+![image](https://github.com/user-attachments/assets/e7c65f78-1ed6-41b0-85e9-4011f28de340)
 ![image](https://github.com/lipiridi/spotless-applier/assets/60580660/f6980124-c3e1-45fe-a7be-51dd4f108e81)
 ![image](https://github.com/lipiridi/spotless-applier/assets/60580660/fbd26155-c7f9-4837-9e97-d48530d0ae39)
 
