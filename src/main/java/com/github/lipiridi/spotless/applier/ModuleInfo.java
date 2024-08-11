@@ -11,7 +11,7 @@ import java.nio.file.Path;
 public record ModuleInfo(Module module, String path, BuildTool buildTool, boolean rootModule) {
 
     @SuppressWarnings("DataFlowIssue")
-    public static ModuleInfo create(Project project, String projectBasePath, Module module) {
+    public static ModuleInfo create(Project project, Module module) {
         BuildTool buildTool = BuildTool.resolveBuildTool(module);
         if (buildTool == null) {
             return null;
@@ -22,7 +22,7 @@ public record ModuleInfo(Module module, String path, BuildTool buildTool, boolea
             return null;
         }
 
-        boolean isRootModule = modulePath.equals(projectBasePath);
+        boolean isRootModule = modulePath.equals(project.getBasePath());
 
         Module rootModule =
                 switch (buildTool) {
