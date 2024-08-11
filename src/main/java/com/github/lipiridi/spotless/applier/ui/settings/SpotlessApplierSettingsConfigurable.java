@@ -30,7 +30,7 @@ public class SpotlessApplierSettingsConfigurable implements Configurable {
     public boolean isModified() {
         SpotlessApplierSettingsState settings = SpotlessApplierSettingsState.getInstance();
 
-        return spotlessApplierSettingsComponent.isAllowGradleCache() != settings.allowGradleCache
+        return spotlessApplierSettingsComponent.isProhibitGradleCache() != settings.prohibitGradleCache
                 || spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying()
                         != settings.optimizeImportsBeforeApplying
                 || spotlessApplierSettingsComponent.isProhibitAsteriskImports() != settings.prohibitImportsWithAsterisk;
@@ -39,7 +39,7 @@ public class SpotlessApplierSettingsConfigurable implements Configurable {
     @Override
     public void apply() {
         SpotlessApplierSettingsState settings = SpotlessApplierSettingsState.getInstance();
-        settings.allowGradleCache = spotlessApplierSettingsComponent.isAllowGradleCache();
+        settings.prohibitGradleCache = spotlessApplierSettingsComponent.isProhibitGradleCache();
         settings.optimizeImportsBeforeApplying = spotlessApplierSettingsComponent.isOptimizeImportsBeforeApplying();
         settings.prohibitImportsWithAsterisk = spotlessApplierSettingsComponent.isProhibitAsteriskImports();
     }
@@ -47,7 +47,7 @@ public class SpotlessApplierSettingsConfigurable implements Configurable {
     @Override
     public void reset() {
         SpotlessApplierSettingsState settings = SpotlessApplierSettingsState.getInstance();
-        spotlessApplierSettingsComponent.setAllowGradleCache(settings.allowGradleCache);
+        spotlessApplierSettingsComponent.setProhibitGradleCache(settings.prohibitGradleCache);
         spotlessApplierSettingsComponent.setOptimizeImportsBeforeApplying(settings.optimizeImportsBeforeApplying);
         spotlessApplierSettingsComponent.setProhibitAsteriskImports(settings.prohibitImportsWithAsterisk);
     }

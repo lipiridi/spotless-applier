@@ -7,6 +7,7 @@
 ### Changed
 
 - Fix commit checkin handler for multi-module projects
+- isAllowedGradleCache replaced with isProhibitGradleCache, as by default we don't have to pass any args to the gradle command
 
 ## [1.1.0] - 2024-06-02
 

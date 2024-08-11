@@ -24,7 +24,6 @@ import java.util.Set;
 import javax.swing.*;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("UnstableApiUsage")
 public class SpotlessCheckinHandler extends CheckinHandler {
     private static final Logger LOGGER = Logger.getInstance(SpotlessCheckinHandler.class);
     private final SpotlessApplierSettingsState spotlessSettings = SpotlessApplierSettingsState.getInstance();

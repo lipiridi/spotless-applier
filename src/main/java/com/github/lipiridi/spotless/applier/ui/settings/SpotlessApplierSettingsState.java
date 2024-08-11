@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
         storages = {@Storage("spotless-applier.xml")})
 public final class SpotlessApplierSettingsState implements PersistentStateComponent<SpotlessApplierSettingsState> {
 
-    public boolean allowGradleCache;
+    public boolean prohibitGradleCache;
     public boolean optimizeImportsBeforeApplying;
     public boolean prohibitImportsWithAsterisk;
     public boolean preCommitSpotlessFormating;
