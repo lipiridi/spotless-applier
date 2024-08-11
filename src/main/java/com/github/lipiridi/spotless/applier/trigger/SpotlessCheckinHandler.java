@@ -7,36 +7,33 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vcs.changes.ChangesUtil;
+import com.intellij.openapi.vcs.changes.Change;
+import com.intellij.openapi.vcs.changes.ChangeListManager;
 import com.intellij.openapi.vcs.changes.CommitExecutor;
 import com.intellij.openapi.vcs.changes.ui.BooleanCommitOption;
 import com.intellij.openapi.vcs.checkin.CheckinHandler;
-import com.intellij.openapi.vcs.checkin.CommitCheck;
-import com.intellij.openapi.vcs.checkin.CommitInfo;
-import com.intellij.openapi.vcs.checkin.CommitProblem;
 import com.intellij.openapi.vcs.ui.RefreshableOnComponent;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PairConsumer;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.swing.*;
-import kotlin.coroutines.Continuation;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class SpotlessCheckinHandler extends CheckinHandler implements CommitCheck {
+public class SpotlessCheckinHandler extends CheckinHandler {
     private static final Logger LOGGER = Logger.getInstance(SpotlessCheckinHandler.class);
     private final SpotlessApplierSettingsState spotlessSettings = SpotlessApplierSettingsState.getInstance();
     private final Project project;
+    private final ChangeListManager changeListManager;
 
     public SpotlessCheckinHandler(Project project) {
         this.project = project;
+        changeListManager = ChangeListManager.getInstance(project);
     }
 
     @Override
@@ -57,30 +54,15 @@ public class SpotlessCheckinHandler extends CheckinHandler implements CommitChec
             return ReturnResult.COMMIT;
         }
 
+        Set<ModuleInfo> affectedModules = findAffectedModules();
+
         try {
-            ModuleInfo rootModule = findRootModule();
-            if (rootModule == null) {
-                Messages.showWarningDialog(
-                        project, "No root project was found", "Error Reformatting Code with Spotless");
-            } else {
-                new ReformatProcessor(project, rootModule).run();
-            }
+            affectedModules.forEach(module -> new ReformatProcessor(project, module).run());
             return ReturnResult.COMMIT;
         } catch (Exception e) {
             handleError(e);
             return ReturnResult.CANCEL;
         }
-    }
-
-    private ModuleInfo findRootModule() {
-        Module[] modules = ProjectUtil.getModules(project);
-
-        return Arrays.stream(modules)
-                .map(module -> ModuleInfo.create(project, module))
-                .filter(Objects::nonNull)
-                .filter(ModuleInfo::rootModule)
-                .findFirst()
-                .orElse(null);
     }
 
     private void handleError(Exception e) {
@@ -92,43 +74,31 @@ public class SpotlessCheckinHandler extends CheckinHandler implements CommitChec
         Messages.showErrorDialog(project, msg, "Error Reformatting Code with Spotless");
     }
 
-    @NotNull @Override
-    public ExecutionOrder getExecutionOrder() {
-        return CommitCheck.ExecutionOrder.MODIFICATION;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return spotlessSettings.preCommitSpotlessFormating;
-    }
-
-    @Nullable @Override
-    public Object runCheck(@NotNull CommitInfo commitInfo, @NotNull Continuation<? super CommitProblem> continuation) {
-        var affectedFiles =
-                ChangesUtil.iterateFiles(commitInfo.getCommittedChanges()).toList();
+    public Set<ModuleInfo> findAffectedModules() {
+        List<VirtualFile> affectedFiles = changeListManager.getAllChanges().stream()
+                .filter(change -> change.getType() != Change.Type.DELETED)
+                .map(Change::getVirtualFile)
+                .filter(Objects::nonNull)
+                .toList();
 
         Set<ModuleInfo> moduleInfos = new HashSet<>();
         Set<Module> modules = new HashSet<>();
         for (VirtualFile affectedFile : affectedFiles) {
             Module moduleForFile = ModuleUtil.findModuleForFile(affectedFile, project);
-            if (!modules.add(moduleForFile)) {
-                continue;
-            }
+            if (modules.add(moduleForFile)) {
+                ModuleInfo moduleInfo = ModuleInfo.create(project, moduleForFile);
+                if (moduleInfo == null) {
+                    continue;
+                }
 
-            ModuleInfo moduleInfo = ModuleInfo.create(project, moduleForFile);
-            if (moduleInfo == null) {
-                continue;
-            }
+                if (moduleInfo.rootModule()) {
+                    return Set.of(moduleInfo);
+                }
 
-            if (moduleInfo.rootModule()) {
-                new ReformatProcessor(project, moduleInfo).run();
-                return null;
+                moduleInfos.add(moduleInfo);
             }
-
-            moduleInfos.add(moduleInfo);
         }
 
-        moduleInfos.forEach(module -> new ReformatProcessor(project, module).run());
-        return null;
+        return moduleInfos;
     }
 }
