@@ -4,10 +4,12 @@
 
 ## [Unreleased]
 
+## [1.1.2] - 2024-08-13
+
 ### Changed
 
 - Gradle task for the entire project is again called in background (async)
-- Pre-commit hook added in version 1.0.5 is no more supported for gradle projects 
+- Pre-commit hook added in version 1.0.5 is no more supported for gradle projects
 
 ## [1.1.1] - 2024-08-11
 
@@ -71,7 +73,8 @@
 - The ability to apply Spotless formatting to the currently opened file in the editor or to the entire project.
 - Introduced an option to execute the default "optimize import" task before applying Spotless formatting.
 
-[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/lipiridi/spotless-applier/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/lipiridi/spotless-applier/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/lipiridi/spotless-applier/compare/v1.0.5...v1.1.0
 [1.0.5]: https://github.com/lipiridi/spotless-applier/compare/v1.0.4...v1.0.5
