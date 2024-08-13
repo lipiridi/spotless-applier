@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Gradle task for the entire project is again called in background (async)
+- Pre-commit hook added in version 1.0.5 is no more supported for gradle projects 
+
 ## [1.1.1] - 2024-08-11
 
 ### Changed

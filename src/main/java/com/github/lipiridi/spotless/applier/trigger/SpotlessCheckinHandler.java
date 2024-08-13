@@ -2,6 +2,7 @@ package com.github.lipiridi.spotless.applier.trigger;
 
 import com.github.lipiridi.spotless.applier.ModuleInfo;
 import com.github.lipiridi.spotless.applier.ReformatProcessor;
+import com.github.lipiridi.spotless.applier.enums.BuildTool;
 import com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
@@ -16,12 +17,10 @@ import com.intellij.openapi.vcs.checkin.CheckinHandler;
 import com.intellij.openapi.vcs.ui.RefreshableOnComponent;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PairConsumer;
-import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import javax.swing.*;
 import org.jetbrains.annotations.Nullable;
 
 public class SpotlessCheckinHandler extends CheckinHandler {
@@ -86,6 +85,12 @@ public class SpotlessCheckinHandler extends CheckinHandler {
             if (modules.add(moduleForFile)) {
                 ModuleInfo moduleInfo = ModuleInfo.create(project, moduleForFile);
                 if (moduleInfo == null) {
+                    continue;
+                }
+
+                // Commiting is a synchronous flow. Currently, gradle has issues with that
+                // https://youtrack.jetbrains.com/issue/IDEA-327879
+                if (moduleInfo.buildTool() == BuildTool.GRADLE) {
                     continue;
                 }
 
