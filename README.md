@@ -5,6 +5,10 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/22455.svg)](https://plugins.jetbrains.com/plugin/22455)
 
 <!-- Plugin description -->
+> ⚠️ Version 1.1.2 is built for Intellij IDEA 2024.2 and doesn't support the pre-commit feature for Gradle projects due to this bug https://youtrack.jetbrains.com/issue/IDEA-327879
+>
+> Version 1.1.1 supports the pre-commit check properly but is only compatible with Intellij IDEA 2024.1.* versions.
+
 The Spotless Applier IntelliJ Plugin enhances your development workflow
 by seamlessly integrating [Spotless](https://github.com/diffplug/spotless) Gradle and Maven tasks directly within the IntelliJ IDE.
 With this plugin, you can easily apply code formatting and style enforcement to your projects,
@@ -17,7 +21,7 @@ either for the current file you're working on or for the entire project.
 | <kbd>Code</kbd> > <kbd>Reformat Project With Spotless</kbd> | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>;</kbd> | <kbd>⌘Сmd</kbd>+<kbd>⌥Opt</kbd>+<kbd>⇧Shift</kbd>+<kbd>;</kbd> |
 
 > ✔️ **Supports multi-module projects**
-> 
+
 ### Commit check
 The plugin offers a commit check to automatically apply Spotless formatting. 
 
