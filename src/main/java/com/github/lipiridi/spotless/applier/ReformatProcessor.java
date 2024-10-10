@@ -14,16 +14,15 @@ import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.externalSystem.model.DataNode;
 import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
+import com.intellij.openapi.externalSystem.model.project.ModuleData;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Version;
 import com.intellij.psi.PsiFile;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import org.gradle.util.GradleVersion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
@@ -34,6 +33,7 @@ import org.jetbrains.idea.maven.utils.MavenUtil;
 import org.jetbrains.plugins.gradle.settings.GradleProjectSettings;
 import org.jetbrains.plugins.gradle.settings.GradleSettings;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
+import org.jetbrains.plugins.gradle.util.GradleUtil;
 
 public class ReformatProcessor {
 
@@ -72,7 +72,26 @@ public class ReformatProcessor {
             if (buildTool != null) {
                 this.modulePath = buildTool.getModulePath(module);
             }
+
+            if (buildTool == BuildTool.GRADLE && !hasSpotlessTask(module)) {
+                this.modulePath = project.getBasePath();
+            }
         }
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private boolean hasSpotlessTask(Module module) {
+        DataNode<ModuleData> gradleModuleData = GradleUtil.findGradleModuleData(module);
+        if (gradleModuleData == null) {
+            return false;
+        }
+        Collection<DataNode<?>> children = gradleModuleData.getChildren();
+        for (DataNode<?> child : children) {
+            if (child.getData().toString().equals("spotlessApply")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void run() {

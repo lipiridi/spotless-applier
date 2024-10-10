@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+### Changed
+
+- [[Issue 27]](https://github.com/lipiridi/spotless-applier/issues/27) Run spotless using root config if plugin is not
+  applied to the submodule
+
 ## [1.1.2] - 2024-08-13
 
 ### Changed
