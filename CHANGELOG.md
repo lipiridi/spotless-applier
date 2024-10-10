@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.1.3] - 2024-10-10
+
 ### Changed
 
 - [#27](https://github.com/lipiridi/spotless-applier/issues/27) Run spotless using root config if plugin is not
@@ -78,7 +80,8 @@
 - The ability to apply Spotless formatting to the currently opened file in the editor or to the entire project.
 - Introduced an option to execute the default "optimize import" task before applying Spotless formatting.
 
-[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/lipiridi/spotless-applier/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/lipiridi/spotless-applier/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/lipiridi/spotless-applier/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/lipiridi/spotless-applier/compare/v1.0.5...v1.1.0
