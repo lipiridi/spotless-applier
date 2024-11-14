@@ -5,7 +5,7 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/22455.svg)](https://plugins.jetbrains.com/plugin/22455)
 
 <!-- Plugin description -->
-> ⚠️ Version 1.1.2 is built for Intellij IDEA 2024.2 and doesn't support the pre-commit feature for Gradle projects due to this bug https://youtrack.jetbrains.com/issue/IDEA-327879
+> ⚠️ Versions >= 1.1.2 are built for Intellij IDEA >= 2024.2 and doesn't support the pre-commit feature for Gradle projects due to this bug https://youtrack.jetbrains.com/issue/IDEA-327879
 >
 > Version 1.1.1 supports the pre-commit check properly but is only compatible with Intellij IDEA 2024.1.* versions.
 
