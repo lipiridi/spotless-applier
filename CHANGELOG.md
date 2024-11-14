@@ -7,6 +7,7 @@
 ### Changed
 
 - [#32](https://github.com/lipiridi/spotless-applier/issues/32) Update version compatibility
+- [#32](https://github.com/lipiridi/spotless-applier/issues/32) Store pre-commit state in workspace
 
 ## [1.1.3] - 2024-10-10
 
