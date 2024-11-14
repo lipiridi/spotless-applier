@@ -3,7 +3,6 @@ package com.github.lipiridi.spotless.applier.trigger;
 import com.github.lipiridi.spotless.applier.ModuleInfo;
 import com.github.lipiridi.spotless.applier.ReformatProcessor;
 import com.github.lipiridi.spotless.applier.enums.BuildTool;
-import com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -25,11 +24,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class SpotlessCheckinHandler extends CheckinHandler {
     private static final Logger LOGGER = Logger.getInstance(SpotlessCheckinHandler.class);
-    private final SpotlessApplierSettingsState spotlessSettings = SpotlessApplierSettingsState.getInstance();
+    private final SpotlessApplierCheckinHandlerState spotlessSettings;
     private final Project project;
 
     public SpotlessCheckinHandler(Project project) {
         this.project = project;
+        this.spotlessSettings = SpotlessApplierCheckinHandlerState.getInstance(project);
     }
 
     @Override

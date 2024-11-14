@@ -17,7 +17,6 @@ public final class SpotlessApplierSettingsState implements PersistentStateCompon
     public boolean prohibitGradleCache;
     public boolean optimizeImportsBeforeApplying;
     public boolean prohibitImportsWithAsterisk;
-    public boolean preCommitSpotlessFormating;
 
     public static SpotlessApplierSettingsState getInstance() {
         return ApplicationManager.getApplication().getService(SpotlessApplierSettingsState.class);
