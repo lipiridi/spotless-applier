@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- [#35](https://github.com/lipiridi/spotless-applier/issues/35) Update version compatibility
+
 ## [1.1.4] - 2024-11-14
 
 ### Changed

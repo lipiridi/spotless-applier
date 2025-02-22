@@ -5,11 +5,11 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "2.0.21"
-    id("org.jetbrains.intellij.platform") version "2.1.0"
+    id("org.jetbrains.kotlin.jvm") version "2.1.10"
+    id("org.jetbrains.intellij.platform") version "2.2.1"
     id("org.jetbrains.changelog") version "2.2.1"
-    id("org.jetbrains.kotlinx.kover") version "0.8.3"
-    id("com.diffplug.spotless") version "6.25.0"
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"
+    id("com.diffplug.spotless") version "7.0.2"
 }
 
 group = providers.gradleProperty("pluginGroup").get()
@@ -40,7 +40,6 @@ dependencies {
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
         plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
 
-        instrumentationTools()
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
@@ -80,7 +79,7 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = providers.gradleProperty("pluginSinceBuild")
-            untilBuild = providers.gradleProperty("pluginUntilBuild")
+            untilBuild = provider { null }
         }
     }
 
