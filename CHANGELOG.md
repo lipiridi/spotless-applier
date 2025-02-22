@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.1.5] - 2025-02-22
+
 ### Changed
 
 - [#35](https://github.com/lipiridi/spotless-applier/issues/35) Update version compatibility
@@ -91,7 +93,8 @@
 - The ability to apply Spotless formatting to the currently opened file in the editor or to the entire project.
 - Introduced an option to execute the default "optimize import" task before applying Spotless formatting.
 
-[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.1.4...HEAD
+[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.1.5...HEAD
+[1.1.5]: https://github.com/lipiridi/spotless-applier/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/lipiridi/spotless-applier/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/lipiridi/spotless-applier/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/lipiridi/spotless-applier/compare/v1.1.1...v1.1.2
