@@ -5,11 +5,11 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "2.1.10"
-    id("org.jetbrains.intellij.platform") version "2.2.1"
-    id("org.jetbrains.changelog") version "2.2.1"
+    id("org.jetbrains.kotlin.jvm") version "2.2.10"
+    id("org.jetbrains.intellij.platform") version "2.9.0"
+    id("org.jetbrains.changelog") version "2.4.0"
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
-    id("com.diffplug.spotless") version "7.0.2"
+    id("com.diffplug.spotless") version "7.2.1"
 }
 
 group = providers.gradleProperty("pluginGroup").get()
@@ -40,8 +40,6 @@ dependencies {
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file for plugin from JetBrains Marketplace.
         plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
 
-        pluginVerifier()
-        zipSigner()
         testFramework(TestFrameworkType.Platform)
     }
 }
@@ -149,15 +147,11 @@ intellijPlatformTesting {
 }
 
 spotless {
-    //https://github.com/diffplug/spotless/issues/1644
-    lineEndings = LineEnding.PLATFORM_NATIVE //or any other except GIT_ATTRIBUTES
-
     java {
         target("src/*/java/**/*.java")
 
         palantirJavaFormat()
-        removeUnusedImports()
-        importOrder()
         formatAnnotations()
+        removeWildcardImports()
     }
 }

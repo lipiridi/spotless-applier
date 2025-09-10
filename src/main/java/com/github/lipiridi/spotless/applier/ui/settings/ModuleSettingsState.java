@@ -1,6 +1,5 @@
 package com.github.lipiridi.spotless.applier.ui.settings;
 
-import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import java.util.ArrayList;
 import java.util.List;

@@ -7,7 +7,6 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.util.containers.ContainerUtil;
-import java.util.*;
 import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.VisibleForTesting;

@@ -20,8 +20,6 @@ import com.intellij.ui.CheckedTreeNode;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.DropDownLink;
 import com.intellij.ui.components.JBScrollPane;
-import java.util.*;
-import javax.swing.*;
 import javax.swing.tree.TreeNode;
 import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
