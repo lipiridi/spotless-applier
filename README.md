@@ -46,6 +46,13 @@ To access plugin settings, go to: `Settings` > `Tools` > `Spotless Applier`
 
 <!-- Plugin description end -->
 
+### Supported Spotless Versions
+
+| Build Tool | Minimum Version Required |
+|------------|-------------------------|
+| **Maven** | Plugin version `>= 2.40.0` |
+| **Gradle** | Plugin version `>= 6.0.5` |
+
 ### Media
 
 ![spotlessdemo](https://github.com/lipiridi/spotless-applier/assets/60580660/990e7bb9-8b75-4ca4-8973-f1fb2cf74e78)

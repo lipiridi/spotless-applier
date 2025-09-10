@@ -8,6 +8,8 @@
 
 - [#40](https://github.com/lipiridi/spotless-applier/issues/40) Removed built-in pre-commit check and added a guide for
   configuring Spotless as a pre-commit task
+- [#38](https://github.com/lipiridi/spotless-applier/issues/38) Use maven IDE hook instead of files property. Use a
+  canonical path for IDE hooks
 
 ## [1.1.5] - 2025-02-22
 
