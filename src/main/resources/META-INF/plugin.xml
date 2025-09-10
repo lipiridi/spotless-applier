@@ -27,7 +27,6 @@
                                  id="com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsConfigurable"
                                  instance="com.github.lipiridi.spotless.applier.ui.settings.SpotlessApplierSettingsConfigurable"
                                  displayName="Spotless Applier"/>
-        <checkinHandlerFactory implementation="com.github.lipiridi.spotless.applier.trigger.SpotlessCheckinHandlerFactory"/>
     </extensions>
 
     <actions>

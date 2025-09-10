@@ -22,7 +22,11 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Version;
 import com.intellij.psi.PsiFile;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.gradle.util.GradleVersion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
@@ -136,7 +140,7 @@ public class ReformatProcessor {
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
         if (reformatSpecificFile) {
             scriptParameters = String.format(
-                    "-PspotlessIdeHook=\"%s\" %s", psiFile.getVirtualFile().getPath(), scriptParameters);
+                    "-PspotlessIdeHook=\"%s\" %s", psiFile.getVirtualFile().getCanonicalPath(), scriptParameters);
         }
 
         externalSettings.setScriptParameters(scriptParameters);
@@ -193,11 +197,7 @@ public class ReformatProcessor {
 
         if (reformatSpecificFile) {
             settings.setVmOptions(String.format(
-                    "-DspotlessFiles=\"%s\"",
-                    psiFile.getVirtualFile()
-                            .getPath()
-                            .replaceAll("\\.", "\\\\.")
-                            .replaceAll("/", ".")));
+                    "-DspotlessIdeHook=\"%s\"", psiFile.getVirtualFile().getCanonicalPath()));
         }
 
         RunnerAndConfigurationSettings configSettings = MavenRunConfigurationType.createRunnerAndConfigurationSettings(

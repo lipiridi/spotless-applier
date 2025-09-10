@@ -6,12 +6,16 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBScrollPane;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import org.jetbrains.annotations.Nullable;
 
 public class SelectModuleDialog extends DialogWrapper {

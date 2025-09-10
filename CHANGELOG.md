@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+### Changed
+
+- [#40](https://github.com/lipiridi/spotless-applier/issues/40) Removed built-in pre-commit check and added a guide for
+  configuring Spotless as a pre-commit task
+- [#38](https://github.com/lipiridi/spotless-applier/issues/38) Use maven IDE hook instead of files property. Use a
+  canonical path for IDE hooks
+
 ## [1.1.5] - 2025-02-22
 
 ### Changed
@@ -36,7 +43,8 @@
 ### Changed
 
 - Fix commit checkin handler for multi-module projects
-- isAllowedGradleCache replaced with isProhibitGradleCache, as by default we don't have to pass any args to the gradle command
+- isAllowedGradleCache replaced with isProhibitGradleCache, as by default we don't have to pass any args to the gradle
+  command
 
 ## [1.1.0] - 2024-06-02
 
@@ -94,15 +102,27 @@
 - Introduced an option to execute the default "optimize import" task before applying Spotless formatting.
 
 [Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.1.5...HEAD
+
 [1.1.5]: https://github.com/lipiridi/spotless-applier/compare/v1.1.4...v1.1.5
+
 [1.1.4]: https://github.com/lipiridi/spotless-applier/compare/v1.1.3...v1.1.4
+
 [1.1.3]: https://github.com/lipiridi/spotless-applier/compare/v1.1.2...v1.1.3
+
 [1.1.2]: https://github.com/lipiridi/spotless-applier/compare/v1.1.1...v1.1.2
+
 [1.1.1]: https://github.com/lipiridi/spotless-applier/compare/v1.1.0...v1.1.1
+
 [1.1.0]: https://github.com/lipiridi/spotless-applier/compare/v1.0.5...v1.1.0
+
 [1.0.5]: https://github.com/lipiridi/spotless-applier/compare/v1.0.4...v1.0.5
+
 [1.0.4]: https://github.com/lipiridi/spotless-applier/compare/v1.0.3...v1.0.4
+
 [1.0.3]: https://github.com/lipiridi/spotless-applier/compare/v1.0.2...v1.0.3
+
 [1.0.2]: https://github.com/lipiridi/spotless-applier/compare/v1.0.1...v1.0.2
+
 [1.0.1]: https://github.com/lipiridi/spotless-applier/compare/v1.0.0...v1.0.1
+
 [1.0.0]: https://github.com/lipiridi/spotless-applier/commits/v1.0.0

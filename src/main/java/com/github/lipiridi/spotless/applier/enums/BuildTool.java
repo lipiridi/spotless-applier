@@ -22,9 +22,10 @@ public enum BuildTool {
     @Nullable public String getModulePath(Module module) {
         return switch (this) {
             case GRADLE -> ExternalSystemApiUtil.getExternalProjectPath(module);
-            case MAVEN -> Optional.ofNullable(ProjectUtil.guessModuleDir(module))
-                    .map(VirtualFile::getPath)
-                    .orElse(null);
+            case MAVEN ->
+                Optional.ofNullable(ProjectUtil.guessModuleDir(module))
+                        .map(VirtualFile::getPath)
+                        .orElse(null);
         };
     }
 }

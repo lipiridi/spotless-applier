@@ -2,7 +2,8 @@ package com.github.lipiridi.spotless.applier.ui;
 
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.util.ui.FormBuilder;
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 
 public class SpotlessApplierSettingsComponent {
 
