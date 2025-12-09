@@ -5,11 +5,11 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "2.2.10"
-    id("org.jetbrains.intellij.platform") version "2.9.0"
-    id("org.jetbrains.changelog") version "2.4.0"
-    id("org.jetbrains.kotlinx.kover") version "0.9.1"
-    id("com.diffplug.spotless") version "7.2.1"
+    id("org.jetbrains.kotlin.jvm") version "2.2.21"
+    id("org.jetbrains.intellij.platform") version "2.10.5"
+    id("org.jetbrains.changelog") version "2.5.0"
+    id("org.jetbrains.kotlinx.kover") version "0.9.3"
+    id("com.diffplug.spotless") version "8.1.0"
 }
 
 group = providers.gradleProperty("pluginGroup").get()
@@ -152,6 +152,6 @@ spotless {
 
         palantirJavaFormat()
         formatAnnotations()
-        removeWildcardImports()
+        forbidWildcardImports()
     }
 }

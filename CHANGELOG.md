@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+- [#38](https://github.com/lipiridi/spotless-applier/issues/38) Determining the correct file path depending on the OS
+
 ## [1.2.0] - 2025-09-10
 
 ### Changed
