@@ -205,8 +205,7 @@ public class ReformatProcessor {
             } else { // Windows and others
                 adjusted = rawPath;
             }
-            settings.setVmOptions(String.format(
-                    "-DspotlessIdeHook=%s", adjusted));
+            settings.setVmOptions(String.format("-DspotlessIdeHook=%s", adjusted));
         }
 
         RunnerAndConfigurationSettings configSettings = MavenRunConfigurationType.createRunnerAndConfigurationSettings(
