@@ -3,7 +3,6 @@ package com.github.lipiridi.spotless.applier;
 import com.intellij.application.options.CodeStyle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
-import com.intellij.core.CoreBundle;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.module.Module;
@@ -76,7 +75,7 @@ public class SynchronousOptimizeImportsProcessor extends OptimizeImportsProcesso
         if (!FileDocumentManager.getInstance().requestWriting(document, myProject)) {
             Messages.showMessageDialog(
                     myProject,
-                    CoreBundle.message("cannot.modify.a.read.only.file", file.getName()),
+                    "Cannot modify a read-only file '%s'.".formatted(file.getName()),
                     CodeInsightBundle.message("error.dialog.readonly.file.title"),
                     Messages.getErrorIcon());
             return;
@@ -85,7 +84,6 @@ public class SynchronousOptimizeImportsProcessor extends OptimizeImportsProcesso
         runWithoutProgress();
     }
 
-    @SuppressWarnings("DialogTitleCapitalization")
     private void runProcessFiles() {
         ProgressManager.getInstance()
                 .runProcessWithProgressSynchronously(

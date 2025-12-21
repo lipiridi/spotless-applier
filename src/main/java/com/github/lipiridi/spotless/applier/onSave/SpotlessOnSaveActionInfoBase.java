@@ -16,6 +16,7 @@ import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.ui.CheckboxTree;
+import com.intellij.ui.CheckboxTreeBase;
 import com.intellij.ui.CheckedTreeNode;
 import com.intellij.ui.TreeSpeedSearch;
 import com.intellij.ui.components.DropDownLink;
@@ -155,7 +156,8 @@ public abstract class SpotlessOnSaveActionInfoBase<Options extends SpotlessOnSav
     protected abstract void addApplicableFileTypes(@NotNull Collection<? super FileType> result);
 
     private @NotNull CheckboxTree createFileTypesCheckboxTree(@NotNull CheckedTreeNode root) {
-        CheckboxTree tree = new CheckboxTree(createFileTypesRenderer(), root) {
+        CheckboxTreeBase.CheckPolicy checkPolicy = new CheckboxTreeBase.CheckPolicy(true, true, false, true, false);
+        CheckboxTree tree = new CheckboxTree(createFileTypesRenderer(), root, checkPolicy) {
             @Override
             protected void installSpeedSearch() {
                 TreeSpeedSearch.installOn(this, false, path -> {
@@ -218,7 +220,13 @@ public abstract class SpotlessOnSaveActionInfoBase<Options extends SpotlessOnSav
         return new CheckboxTree.CheckboxTreeCellRenderer() {
             @Override
             public void customizeRenderer(
-                    JTree t, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean focus) {
+                    @NotNull JTree t,
+                    @NotNull Object value,
+                    boolean selected,
+                    boolean expanded,
+                    boolean leaf,
+                    int row,
+                    boolean focus) {
                 if (!(value instanceof CheckedTreeNode node)) return;
 
                 final Object userObject = node.getUserObject();
