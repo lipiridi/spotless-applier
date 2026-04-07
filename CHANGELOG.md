@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+- [#49](https://github.com/lipiridi/spotless-applier/issues/49) Maven - Quote file path when run for specific file
+
 ## [1.2.1] - 2025-12-09
 
 - [#38](https://github.com/lipiridi/spotless-applier/issues/38) Determining the correct file path depending on the OS
