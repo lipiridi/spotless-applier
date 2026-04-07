@@ -22,7 +22,7 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Version;
 import com.intellij.psi.PsiFile;
-import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -56,21 +56,22 @@ public class ReformatProcessor {
     private BuildTool buildTool;
     private String modulePath;
 
-    public ReformatProcessor(@NotNull Project project, @NotNull ModuleInfo moduleInfo) {
+    public ReformatProcessor(@NotNull final Project project, @NotNull final ModuleInfo moduleInfo) {
         this.project = project;
         this.module = moduleInfo.module();
         this.buildTool = moduleInfo.buildTool();
         this.modulePath = moduleInfo.path();
     }
 
-    public ReformatProcessor(@NotNull Project project, @NotNull Document document, @NotNull PsiFile psiFile) {
+    public ReformatProcessor(
+            @NotNull final Project project, @NotNull final Document document, @NotNull final PsiFile psiFile) {
         this.project = project;
         this.reformatSpecificFile = true;
         this.document = document;
         this.psiFile = psiFile;
         this.reformatTaskCallback = new ReformatTaskCallback(project, NOTIFICATION_GROUP, document);
 
-        Module module = ModuleUtil.findModuleForFile(psiFile);
+        final Module module = ModuleUtil.findModuleForFile(psiFile);
         if (module != null) {
             this.buildTool = BuildTool.resolveBuildTool(module);
 
@@ -85,13 +86,13 @@ public class ReformatProcessor {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private boolean hasSpotlessTask(Module module) {
-        DataNode<ModuleData> gradleModuleData = GradleUtil.findGradleModuleData(module);
+    private boolean hasSpotlessTask(final Module module) {
+        final DataNode<ModuleData> gradleModuleData = GradleUtil.findGradleModuleData(module);
         if (gradleModuleData == null) {
             return false;
         }
-        Collection<DataNode<?>> children = gradleModuleData.getChildren();
-        for (DataNode<?> child : children) {
+        final Collection<DataNode<?>> children = gradleModuleData.getChildren();
+        for (final DataNode<?> child : children) {
             if (child.getData().toString().equals("spotlessApply")) {
                 return true;
             }
@@ -120,7 +121,7 @@ public class ReformatProcessor {
     }
 
     private void executeGradleTask() {
-        ExternalSystemTaskExecutionSettings externalSettings = getGradleSystemTaskExecutionSettings();
+        final ExternalSystemTaskExecutionSettings externalSettings = getGradleSystemTaskExecutionSettings();
 
         ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
@@ -135,13 +136,15 @@ public class ReformatProcessor {
     private ExternalSystemTaskExecutionSettings getGradleSystemTaskExecutionSettings() {
         String scriptParameters = shouldAddNoConfigCacheOption() ? "--no-configuration-cache" : "";
 
-        ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
+        final ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
         externalSettings.setExternalProjectPath(modulePath);
         externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
-        if (reformatSpecificFile) {
+        final String canonicalPath = psiFile.getVirtualFile().getCanonicalPath();
+        if (reformatSpecificFile && Objects.nonNull(canonicalPath)) {
             scriptParameters = String.format(
-                    "-PspotlessIdeHook=\"%s\" %s", psiFile.getVirtualFile().getCanonicalPath(), scriptParameters);
+                            "-PspotlessIdeHook=%s %s", quoteForCommandLine(canonicalPath), scriptParameters)
+                    .trim();
         }
 
         externalSettings.setScriptParameters(scriptParameters);
@@ -154,7 +157,7 @@ public class ReformatProcessor {
             return false;
         }
 
-        Optional<GradleProjectSettings> maybeProjectSettings =
+        final Optional<GradleProjectSettings> maybeProjectSettings =
                 Optional.ofNullable(GradleSettings.getInstance(project).getLinkedProjectSettings(modulePath));
 
         if (maybeProjectSettings.isEmpty()) {
@@ -162,19 +165,23 @@ public class ReformatProcessor {
             return false;
         }
 
-        GradleVersion gradleVersion = maybeProjectSettings.get().resolveGradleVersion();
+        final GradleVersion gradleVersion = maybeProjectSettings.get().resolveGradleVersion();
 
         return Objects.requireNonNull(Version.parseVersion(gradleVersion.getVersion()))
                 .isOrGreaterThan(NO_CONFIG_CACHE_MIN_GRADLE_VERSION.major, NO_CONFIG_CACHE_MIN_GRADLE_VERSION.minor);
     }
 
     private void executeMavenTask() {
-        List<String> commands = Collections.singletonList("spotless:apply");
+        final List<String> commands = new ArrayList<>();
+        if (reformatSpecificFile) {
+            commands.add("-DspotlessIdeHook=" + psiFile.getVirtualFile().getCanonicalPath());
+        }
+        commands.add("spotless:apply");
 
-        ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
+        final ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
         externalSettings.setTaskNames(commands);
 
-        ExecutionEnvironment environment = getMavenExecutionEnvironment(commands);
+        final ExecutionEnvironment environment = getMavenExecutionEnvironment(commands);
 
         ToolEnvExternalSystemUtil.runTask(
                 externalSettings,
@@ -187,34 +194,28 @@ public class ReformatProcessor {
                 environment);
     }
 
-    @NotNull private ExecutionEnvironment getMavenExecutionEnvironment(List<String> commands) {
-        MavenRunner mavenRunner = MavenRunner.getInstance(project);
+    @NotNull private ExecutionEnvironment getMavenExecutionEnvironment(final List<String> commands) {
+        final MavenRunner mavenRunner = MavenRunner.getInstance(project);
 
-        MavenRunnerSettings settings = mavenRunner.getState().clone();
+        final MavenRunnerSettings settings = mavenRunner.getState().clone();
 
-        MavenRunnerParameters params = new MavenRunnerParameters();
+        final MavenRunnerParameters params = new MavenRunnerParameters();
         params.setWorkingDirPath(modulePath);
         params.setGoals(commands);
 
-        if (reformatSpecificFile) {
-            final String rawPath = psiFile.getVirtualFile().getCanonicalPath();
-            final String adjusted;
-            final String rootPath = File.listRoots()[0].getPath();
-            if (rootPath.equals("/")) { // Unix / Linux / macOS
-                adjusted = "/" + rawPath;
-            } else { // Windows and others
-                adjusted = rawPath;
-            }
-            settings.setVmOptions(String.format("-DspotlessIdeHook=%s", adjusted));
-        }
-
-        RunnerAndConfigurationSettings configSettings = MavenRunConfigurationType.createRunnerAndConfigurationSettings(
-                null, settings, params, project, MavenRunConfigurationType.generateName(project, params), false);
+        final RunnerAndConfigurationSettings configSettings =
+                MavenRunConfigurationType.createRunnerAndConfigurationSettings(
+                        null,
+                        settings,
+                        params,
+                        project,
+                        MavenRunConfigurationType.generateName(project, params),
+                        false);
 
         configSettings.setActivateToolWindowBeforeRun(false);
 
-        ProgramRunner<?> runner = DefaultJavaProgramRunner.getInstance();
-        Executor executor = DefaultRunExecutor.getRunExecutorInstance();
+        final ProgramRunner<?> runner = DefaultJavaProgramRunner.getInstance();
+        final Executor executor = DefaultRunExecutor.getRunExecutorInstance();
         return new ExecutionEnvironment(executor, runner, configSettings, project);
     }
 
@@ -223,7 +224,7 @@ public class ReformatProcessor {
             return;
         }
 
-        var synchronousOptimizeImportsProcessor = reformatSpecificFile
+        final var synchronousOptimizeImportsProcessor = reformatSpecificFile
                 ? new SynchronousOptimizeImportsProcessor(
                         project, spotlessSettings.prohibitImportsWithAsterisk, psiFile)
                 : new SynchronousOptimizeImportsProcessor(
@@ -234,5 +235,9 @@ public class ReformatProcessor {
 
     private String getModuleName() {
         return module == null ? project.getName() : module.getName();
+    }
+
+    static @NotNull String quoteForCommandLine(final String value) {
+        return "\"" + value.replace("\"", "\\\"") + "\"";
     }
 }
