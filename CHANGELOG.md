@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-04-08
+
 - [#49](https://github.com/lipiridi/spotless-applier/issues/49) Maven - Quote file path when run for specific file
 
 ## [1.2.1] - 2025-12-09
@@ -109,7 +111,8 @@
 - The ability to apply Spotless formatting to the currently opened file in the editor or to the entire project.
 - Introduced an option to execute the default "optimize import" task before applying Spotless formatting.
 
-[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/lipiridi/spotless-applier/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/lipiridi/spotless-applier/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/lipiridi/spotless-applier/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/lipiridi/spotless-applier/compare/v1.1.4...v1.1.5
