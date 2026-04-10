@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+- [#49](https://github.com/lipiridi/spotless-applier/issues/49) Maven - Fix path containing space in Linux
+
 ## [1.2.2] - 2026-04-08
 
 - [#49](https://github.com/lipiridi/spotless-applier/issues/49) Maven - Quote file path when run for specific file

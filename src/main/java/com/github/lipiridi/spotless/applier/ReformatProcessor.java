@@ -23,11 +23,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Version;
 import com.intellij.psi.PsiFile;
 import java.io.File;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import org.gradle.util.GradleVersion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.execution.MavenRunConfigurationType;
@@ -169,7 +165,19 @@ public class ReformatProcessor {
     }
 
     private void executeMavenTask() {
-        List<String> commands = Collections.singletonList("spotless:apply");
+        List<String> commands = new ArrayList<>();
+        commands.add("spotless:apply");
+        if (reformatSpecificFile) {
+            final String rawPath = psiFile.getVirtualFile().getCanonicalPath();
+            final String adjusted;
+            final String rootPath = File.listRoots()[0].getPath();
+            if (rootPath.equals("/")) { // Unix / Linux / macOS
+                adjusted = "/" + rawPath;
+            } else { // Windows and others
+                adjusted = rawPath;
+            }
+            commands.add("-DspotlessIdeHook=" + adjusted);
+        }
 
         ExternalSystemTaskExecutionSettings externalSettings = new ExternalSystemTaskExecutionSettings();
         externalSettings.setTaskNames(commands);
@@ -195,18 +203,6 @@ public class ReformatProcessor {
         MavenRunnerParameters params = new MavenRunnerParameters();
         params.setWorkingDirPath(modulePath);
         params.setGoals(commands);
-
-        if (reformatSpecificFile) {
-            final String rawPath = psiFile.getVirtualFile().getCanonicalPath();
-            final String adjusted;
-            final String rootPath = File.listRoots()[0].getPath();
-            if (rootPath.equals("/")) { // Unix / Linux / macOS
-                adjusted = "/" + rawPath;
-            } else { // Windows and others
-                adjusted = rawPath;
-            }
-            settings.setVmOptions(String.format("-DspotlessIdeHook=\"%s\"", adjusted));
-        }
 
         RunnerAndConfigurationSettings configSettings = MavenRunConfigurationType.createRunnerAndConfigurationSettings(
                 null, settings, params, project, MavenRunConfigurationType.generateName(project, params), false);
