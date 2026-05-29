@@ -54,6 +54,8 @@
         <actionOnSave id="SpotlessActionOnSave"
                       implementation="com.github.lipiridi.spotless.applier.actions.ReformatActionOnSave"
                       order="after FormatOnSaveAction"/>
+        <postStartupActivity
+                implementation="com.github.lipiridi.spotless.applier.startup.SpotlessApplierStartupActivity"/>
     </extensions>
 
     <extensionPoints>
