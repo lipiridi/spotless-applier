@@ -21,8 +21,12 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Version;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.platform.eel.provider.EelNioBridgeServiceKt;
+import com.intellij.platform.eel.provider.utils.EelPathUtils;
 import com.intellij.psi.PsiFile;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -141,8 +145,8 @@ public class ReformatProcessor {
         externalSettings.setTaskNames(Collections.singletonList("spotlessApply"));
         externalSettings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.getId());
         if (reformatSpecificFile) {
-            scriptParameters = String.format(
-                    "-PspotlessIdeHook=\"%s\" %s", psiFile.getVirtualFile().getCanonicalPath(), scriptParameters);
+            scriptParameters =
+                    String.format("-PspotlessIdeHook=\"%s\" %s", resolveSpotlessIdeHookPath(), scriptParameters);
         }
 
         externalSettings.setScriptParameters(scriptParameters);
@@ -173,7 +177,7 @@ public class ReformatProcessor {
         List<String> commands = new ArrayList<>();
         commands.add("spotless:apply");
         if (reformatSpecificFile) {
-            final String rawPath = psiFile.getVirtualFile().getCanonicalPath();
+            final String rawPath = resolveSpotlessIdeHookPath();
             final String adjusted;
             final String rootPath = File.listRoots()[0].getPath();
             if (rootPath.equals("/")) { // Unix / Linux / macOS
@@ -235,5 +239,25 @@ public class ReformatProcessor {
 
     private String getModuleName() {
         return module == null ? project.getName() : module.getName();
+    }
+
+    /**
+     * Returns the absolute path of the file being reformatted, expressed in the filesystem of the
+     * build tool process. For local projects this is just the host path. For projects opened via
+     * Gateway's ijent-based Dev Container mode, {@link VirtualFile#toNioPath()} hands back a path
+     * inside the host-side Eel virtual filesystem (rendered as
+     * {@code //$devcontainer.ij/<hash>@/workspaces/...}), which is meaningless to the in-container
+     * {@code mvn}/{@code gradlew} child process. The Eel bridge translates it to the
+     * container-internal absolute path the child can resolve.
+     */
+    @SuppressWarnings("UnstableApiUsage")
+    private String resolveSpotlessIdeHookPath() {
+        VirtualFile virtualFile = psiFile.getVirtualFile();
+        Path nioPath = virtualFile.toNioPath();
+        if (EelPathUtils.isPathLocal(nioPath)) {
+            String canonical = virtualFile.getCanonicalPath();
+            return canonical != null ? canonical : nioPath.toString();
+        }
+        return EelNioBridgeServiceKt.asEelPath(nioPath).toString();
     }
 }
