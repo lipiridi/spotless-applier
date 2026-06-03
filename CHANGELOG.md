@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+## 1.2.4
+
+- Support Dev Containers in `ijent` mode which is JetBrain's new
+  architecture for Dev Containers and became the default
+  with IntelliJ IDEA 2026.1.
+  - [#55](https://github.com/lipiridi/spotless-applier/pull/55)
+    Map -DspotlessIdeHook through Eel for ijent Dev Containers
+
 ## [1.2.3] - 2026-04-10
 
 - [#49](https://github.com/lipiridi/spotless-applier/issues/49) Maven - Fix path containing space in Linux
