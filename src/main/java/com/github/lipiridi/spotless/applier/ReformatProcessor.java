@@ -22,8 +22,10 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Version;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.platform.eel.EelDescriptor;
 import com.intellij.platform.eel.provider.EelNioBridgeServiceKt;
-import com.intellij.platform.eel.provider.utils.EelPathUtils;
+import com.intellij.platform.eel.provider.EelProviderUtil;
+import com.intellij.platform.eel.provider.LocalEelDescriptor;
 import com.intellij.psi.PsiFile;
 import java.io.File;
 import java.nio.file.Path;
@@ -254,7 +256,8 @@ public class ReformatProcessor {
     private String resolveSpotlessIdeHookPath() {
         VirtualFile virtualFile = psiFile.getVirtualFile();
         Path nioPath = virtualFile.toNioPath();
-        if (EelPathUtils.isPathLocal(nioPath)) {
+        EelDescriptor descriptor = EelProviderUtil.getEelDescriptor(nioPath);
+        if (LocalEelDescriptor.INSTANCE.equals(descriptor)) {
             String canonical = virtualFile.getCanonicalPath();
             return canonical != null ? canonical : nioPath.toString();
         }
