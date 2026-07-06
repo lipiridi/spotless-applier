@@ -4,8 +4,6 @@
 
 ## [Unreleased]
 
-## [1.2.4] - 2026-06-03
-
 - Support Dev Containers in `ijent` mode which is JetBrain's new
   architecture for Dev Containers and became the default
   with IntelliJ IDEA 2026.1.
