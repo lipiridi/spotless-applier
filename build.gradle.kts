@@ -1,6 +1,7 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask.FailureLevel
 
 plugins {
     id("java")
@@ -13,6 +14,12 @@ plugins {
 
 group = providers.gradleProperty("pluginGroup").get()
 version = providers.gradleProperty("pluginVersion").get()
+
+// Toggle between IntelliJ IDEA Community (default) and Ultimate for the sandbox / verifier IDE.
+// Ultimate is only needed when manually testing features that are Ultimate-only (e.g. Remote
+// Development / Dev Containers). Override locally or via `-PplatformType=IU` on the CLI.
+val useIdeaUltimate = providers.gradleProperty("platformType").orElse("IC").get()
+    .equals("IU", ignoreCase = true)
 
 // Set the JVM language level used to build the project.
 kotlin {
@@ -31,7 +38,11 @@ repositories {
 dependencies {
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
-        intellijIdea(providers.gradleProperty("platformVersion"))
+        if (useIdeaUltimate) {
+            intellijIdeaUltimate(providers.gradleProperty("platformVersion"))
+        } else {
+            intellijIdea(providers.gradleProperty("platformVersion"))
+        }
 
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
         bundledPlugins(providers.gradleProperty("platformBundledPlugins").map { it.split(',') })
@@ -95,6 +106,11 @@ intellijPlatform {
     }
 
     pluginVerification {
+        failureLevel = listOf(
+            FailureLevel.COMPATIBILITY_PROBLEMS,
+            FailureLevel.INTERNAL_API_USAGES,
+            FailureLevel.OVERRIDE_ONLY_API_USAGES,
+        )
         ides {
             recommended()
         }
@@ -125,6 +141,14 @@ tasks {
 
     publishPlugin {
         dependsOn("patchChangelog")
+    }
+
+    // When running against IDEA Ultimate (see `platformType` above), keep the Ultimate modules
+    // enabled in the sandbox so features like "Remote Development" show up.
+    if (useIdeaUltimate) {
+        prepareSandbox {
+            disabledPlugins.empty()
+        }
     }
 }
 
