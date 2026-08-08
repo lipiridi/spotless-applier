@@ -11,6 +11,8 @@
   Warm up SpotlessOnSaveOptions off-EDT to avoid ijent crash
 - [#55](https://github.com/lipiridi/spotless-applier/pull/55)
   Map -DspotlessIdeHook through Eel for ijent Dev Containers
+- [#61](https://github.com/lipiridi/spotless-applier/pull/61)
+  Bump platform compatibility to 261
 
 ## [1.2.3] - 2026-04-10
 
@@ -50,8 +52,8 @@
 
 ### Changed
 
-- [#27](https://github.com/lipiridi/spotless-applier/issues/27) Run spotless using root config if plugin is not
-  applied to the submodule
+- [#27](https://github.com/lipiridi/spotless-applier/issues/27) Run spotless using root config if plugin is not applied
+  to the submodule
 
 ## [1.1.2] - 2024-08-13
 
@@ -123,8 +125,7 @@
 - The ability to apply Spotless formatting to the currently opened file in the editor or to the entire project.
 - Introduced an option to execute the default "optimize import" task before applying Spotless formatting.
 
-[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.2.4...HEAD
-[1.2.4]: https://github.com/lipiridi/spotless-applier/compare/v1.2.3...v1.2.4
+[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.2.3...HEAD
 [1.2.3]: https://github.com/lipiridi/spotless-applier/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/lipiridi/spotless-applier/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/lipiridi/spotless-applier/compare/v1.2.0...v1.2.1
