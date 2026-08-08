@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-08-08
+
 - Support Dev Containers in `ijent` mode which is JetBrain's new
   architecture for Dev Containers and became the default
   with IntelliJ IDEA 2026.1.
@@ -125,7 +127,8 @@
 - The ability to apply Spotless formatting to the currently opened file in the editor or to the entire project.
 - Introduced an option to execute the default "optimize import" task before applying Spotless formatting.
 
-[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.2.3...HEAD
+[Unreleased]: https://github.com/lipiridi/spotless-applier/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/lipiridi/spotless-applier/compare/v1.2.3...v1.3.0
 [1.2.3]: https://github.com/lipiridi/spotless-applier/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/lipiridi/spotless-applier/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/lipiridi/spotless-applier/compare/v1.2.0...v1.2.1
